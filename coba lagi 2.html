@@ -1,0 +1,3316 @@
+<!doctype html>
+<html lang="id" style="height: 100%;">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Operasional Perusahaan</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .profile-dropdown {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-content {
+            transition: opacity 0.2s ease-in-out;
+        }
+        
+        .tab-button {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .form-input-enhanced {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .form-input-enhanced:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        
+        /* Custom color classes */
+        .bg-primary { background-color: #FF8500; }
+        .bg-primary-hover:hover { background-color: #e6770a; }
+        .text-primary { color: #FF8500; }
+        .border-primary { border-color: #FF8500; }
+        .focus-primary:focus { border-color: #FF8500; box-shadow: 0 0 0 3px rgba(255, 133, 0, 0.1); }
+        
+        .bg-secondary { background-color: #3FD8D4; }
+        .bg-secondary-hover:hover { background-color: #36c2be; }
+        .text-secondary { color: #3FD8D4; }
+        .border-secondary { border-color: #3FD8D4; }
+        .focus-secondary:focus { border-color: #3FD8D4; box-shadow: 0 0 0 3px rgba(63, 216, 212, 0.1); }
+        
+        /* Enhanced theme colors */
+        .bg-gradient-primary { background: linear-gradient(135deg, #FF8500 0%, #ff9933 100%); }
+        .bg-gradient-secondary { background: linear-gradient(135deg, #3FD8D4 0%, #5de3df 100%); }
+        .bg-gradient-theme { background: linear-gradient(135deg, #3FD8D4 0%, #FF8500 100%); }
+        .bg-gradient-theme-reverse { background: linear-gradient(135deg, #FF8500 0%, #3FD8D4 100%); }
+        
+        /* Button variants */
+        .btn-primary { 
+            background: linear-gradient(135deg, #FF8500 0%, #ff9933 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover { 
+            background: linear-gradient(135deg, #e6770a 0%, #e6882e 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 133, 0, 0.3);
+        }
+        
+        .btn-secondary { 
+            background: linear-gradient(135deg, #3FD8D4 0%, #5de3df 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover { 
+            background: linear-gradient(135deg, #36c2be 0%, #52d9d5 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(63, 216, 212, 0.3);
+        }
+        
+        /* Card enhancements */
+        .card-theme {
+            background: linear-gradient(135deg, rgba(63, 216, 212, 0.05) 0%, rgba(255, 133, 0, 0.05) 100%);
+            border: 1px solid rgba(63, 216, 212, 0.1);
+        }
+        
+        /* Status badges */
+        .badge-active {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+        }
+        
+        .badge-inactive {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            color: white;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body style="height: 100%; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" class="bg-gray-50"><!-- Login Page -->
+  <div id="loginPage" class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+   <div class="max-w-md w-full space-y-8">
+    <div class="text-center">
+     <div class="mx-auto h-24 w-24 bg-gradient-to-br from-[#3FD8D4] to-[#FF8500] rounded-2xl flex items-center justify-center mb-6 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+      <svg class="h-14 w-14 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+      </svg>
+     </div>
+     <h2 id="loginTitle" class="text-3xl font-bold text-gray-900">Sistem Operasional Perusahaan</h2>
+     <p class="mt-2 text-sm text-gray-600">Silakan masuk dengan NPP dan password Anda</p>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-8">
+     <form id="loginForm" class="space-y-6">
+      <div><label for="npp" class="block text-sm font-medium text-gray-700">NPP (Nomor Pokok Pegawai)</label> <input id="npp" name="npp" type="text" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Masukkan NPP">
+      </div>
+      <div><label for="password" class="block text-sm font-medium text-gray-700">Password</label> <input id="password" name="password" type="password" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Masukkan password">
+      </div>
+      <div><button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-xl text-white btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition duration-200"> <span id="loginButtonText">Masuk</span>
+        <div id="loginSpinner" class="hidden ml-2">
+         <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+        </div></button>
+      </div>
+     </form>
+     <div class="mt-4 text-center">
+      <div class="text-xs text-gray-500 space-y-2">
+       <p class="font-semibold text-gray-700">Akun Login:</p>
+       <div class="grid grid-cols-3 gap-2 text-left">
+        <div class="bg-blue-50 p-2 rounded">
+         <p class="font-semibold text-blue-700">Admin</p>
+         <p><strong>NPP:</strong> admin</p>
+         <p><strong>Pass:</strong> admin123</p>
+         <p class="text-xs text-blue-600 mt-1">✓ Akses Penuh</p>
+        </div>
+        <div class="bg-green-50 p-2 rounded">
+         <p class="font-semibold text-green-700">Pegawai</p>
+         <p><strong>NPP:</strong> pegawai</p>
+         <p><strong>Pass:</strong> pegawai123</p>
+         <p class="text-xs text-green-600 mt-1">✓ Bisa Edit</p>
+        </div>
+        <div class="bg-orange-50 p-2 rounded">
+         <p class="font-semibold text-orange-700">Manajer</p>
+         <p><strong>NPP:</strong> manajer</p>
+         <p><strong>Pass:</strong> manajer123</p>
+         <p class="text-xs text-orange-600 mt-1">Lihat Saja</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Main Dashboard -->
+  <div id="mainPage" class="hidden min-h-full"><!-- Header -->
+   <header class="bg-gradient-theme shadow-lg border-b border-orange-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex justify-between items-center py-4">
+      <div class="flex items-center">
+       <div class="h-12 w-12 bg-white bg-opacity-20 backdrop-blur-sm rounded-xl flex items-center justify-center mr-3 shadow-lg">
+        <svg class="h-8 w-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+       </div>
+       <h1 id="dashboardTitle" class="text-xl font-semibold text-white">Dashboard Perusahaan</h1>
+      </div>
+      <div class="flex items-center space-x-4"><span class="text-sm text-white text-opacity-90">Status: <span class="font-medium text-white">Administrator</span></span>
+       <div class="relative"><button id="profileButton" class="flex items-center space-x-2 bg-white bg-opacity-20 backdrop-blur-sm rounded-full p-2 hover:bg-white hover:bg-opacity-30 transition duration-200">
+         <div id="headerProfilePhoto" class="h-8 w-8 bg-white bg-opacity-30 rounded-full flex items-center justify-center overflow-hidden"><span id="headerProfileInitials" class="text-white text-sm font-medium">AD</span> <img id="headerProfileImage" class="hidden h-full w-full object-cover" alt="Profile Photo">
+         </div>
+         <svg class="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+         </svg></button>
+        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg profile-dropdown z-50">
+         <div class="py-1"><button id="editProfileBtn" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+           </svg> Edit Profil </button> <button id="logoutBtn" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 0v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+           </svg> Logout </button>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </header><!-- Main Content -->
+   <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0"><!-- Dashboard Statistics -->
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6"><!-- Total Perusahaan Card -->
+      <div class="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:scale-105 card-theme">
+       <div class="p-6">
+        <div class="flex items-center">
+         <div class="flex-shrink-0">
+          <div class="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center shadow-lg">
+           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+           </svg>
+          </div>
+         </div>
+         <div class="ml-5 w-0 flex-1">
+          <dl>
+           <dt class="text-sm font-medium text-gray-500 truncate">
+            Total Perusahaan
+           </dt>
+           <dd id="totalCompanies" class="text-2xl font-bold text-gray-900">
+            0
+           </dd>
+           <dd class="text-xs text-gray-400 mt-1">
+            Semua data perusahaan
+           </dd>
+          </dl>
+         </div>
+        </div>
+       </div>
+      </div><!-- Status Aktif Card -->
+      <div class="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer card-theme" onclick="filterByStatus('Aktif')">
+       <div class="p-6">
+        <div class="flex items-center">
+         <div class="flex-shrink-0">
+          <div class="w-12 h-12 bg-gradient-secondary rounded-xl flex items-center justify-center shadow-lg">
+           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+         </div>
+         <div class="ml-5 w-0 flex-1">
+          <dl>
+           <dt class="text-sm font-medium text-gray-500 truncate">
+            Status Aktif
+           </dt>
+           <dd id="activeCompanies" class="text-2xl font-bold text-green-600">
+            0
+           </dd>
+           <dd class="text-xs text-green-500 mt-1">
+            Klik untuk filter
+           </dd>
+          </dl>
+         </div>
+        </div>
+        <div class="mt-4">
+         <div class="flex items-center justify-between text-sm"><span class="text-gray-500">Persentase</span> <span id="activePercentage" class="font-medium text-green-600">0%</span>
+         </div>
+         <div class="mt-2 bg-gray-200 rounded-full h-2">
+          <div id="activeProgressBar" class="bg-gradient-secondary h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Status Nonaktif Card -->
+      <div class="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer card-theme" onclick="filterByStatus('Nonaktif')">
+       <div class="p-6">
+        <div class="flex items-center">
+         <div class="flex-shrink-0">
+          <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+         </div>
+         <div class="ml-5 w-0 flex-1">
+          <dl>
+           <dt class="text-sm font-medium text-gray-500 truncate">
+            Status Nonaktif
+           </dt>
+           <dd id="inactiveCompanies" class="text-2xl font-bold text-red-600">
+            0
+           </dd>
+           <dd class="text-xs text-red-500 mt-1">
+            Klik untuk filter
+           </dd>
+          </dl>
+         </div>
+        </div>
+        <div class="mt-4">
+         <div class="flex items-center justify-between text-sm"><span class="text-gray-500">Persentase</span> <span id="inactivePercentage" class="font-medium text-red-600">0%</span>
+         </div>
+         <div class="mt-2 bg-gray-200 rounded-full h-2">
+          <div id="inactiveProgressBar" class="bg-gradient-to-r from-red-400 to-red-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Ditambah Bulan Ini Card -->
+      <div class="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:scale-105 card-theme">
+       <div class="p-6">
+        <div class="flex items-center">
+         <div class="flex-shrink-0">
+          <div class="w-12 h-12 bg-gradient-theme-reverse rounded-xl flex items-center justify-center shadow-lg">
+           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+         </div>
+         <div class="ml-5 w-0 flex-1">
+          <dl>
+           <dt class="text-sm font-medium text-gray-500 truncate">
+            Bulan Ini
+           </dt>
+           <dd id="monthlyCompanies" class="text-2xl font-bold text-blue-600">
+            0
+           </dd>
+           <dd class="text-xs text-blue-500 mt-1">
+            Perusahaan baru
+           </dd>
+          </dl>
+         </div>
+        </div>
+        <div class="mt-4">
+         <div class="flex items-center text-sm">
+          <svg class="w-4 h-4 text-blue-500 mr-1" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg><span id="monthlyTrend" class="text-blue-600 font-medium">+0 dari bulan lalu</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Search and Filter Section -->
+     <div class="bg-white rounded-xl shadow-lg border border-gray-100 mb-6 overflow-hidden"><!-- Header Section -->
+      <div class="bg-gradient-theme px-6 py-5 border-b border-orange-200">
+       <div class="flex items-center justify-between">
+        <div class="flex items-center">
+         <div class="w-10 h-10 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg flex items-center justify-center mr-3 shadow-md">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+         </div>
+         <div>
+          <h2 class="text-xl font-bold text-white">Pencarian &amp; Filter</h2>
+          <p class="text-sm text-white text-opacity-90 mt-1">Temukan perusahaan dengan mudah menggunakan filter yang tersedia</p>
+         </div>
+        </div><button id="toggleAdvancedFilter" class="flex items-center px-4 py-2 bg-white bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 rounded-lg text-sm font-medium text-white hover:bg-white hover:bg-opacity-30 transition-colors duration-200 shadow-sm">
+         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+         </svg><span id="toggleText">Filter Lanjutan</span>
+         <svg id="toggleIcon" class="w-4 h-4 ml-2 transform transition-transform duration-200" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+         </svg></button>
+       </div>
+      </div><!-- Main Filter Section -->
+      <div class="p-6"><!-- Quick Search Bar -->
+       <div class="mb-6">
+        <div class="relative max-w-md">
+         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+         </div><input type="text" id="searchInput" placeholder="Cari nama perusahaan, kode SWIFT, atau nomor telepon..." class="block w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm shadow-sm transition-all duration-200">
+        </div>
+       </div><!-- Basic Filters -->
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="space-y-2"><label class="block text-sm font-semibold text-gray-700 flex items-center">
+          <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg> Status Perusahaan </label> <select id="statusFilter" class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white transition-all duration-200"> <option value="">Semua Status</option> <option value="Aktif">✅ Aktif</option> <option value="Nonaktif">❌ Nonaktif</option> </select>
+        </div>
+        <div class="space-y-2"><label class="block text-sm font-semibold text-gray-700 flex items-center">
+          <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg> Jenis Usaha </label> <select id="jenisUsahaFilter" class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white transition-all duration-200"> <option value="">Semua Jenis Usaha</option> <option value="Bank">Bank</option> <option value="Asuransi">Asuransi</option> <option value="Sekuritas">Sekuritas</option> <option value="Investment Management">Investment Management</option> <option value="Lainnya">Lainnya</option> </select>
+        </div>
+        <div class="space-y-2"><label class="block text-sm font-semibold text-gray-700 flex items-center">
+          <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg> Aksi Cepat </label> <button id="clearFiltersBtn" class="w-full btn-secondary px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg> Reset Semua Filter </button>
+        </div>
+       </div><!-- Advanced Date Range Filters -->
+       <div id="advancedFilters" class="hidden border-t border-gray-200 pt-6">
+        <div class="mb-4">
+         <h3 class="text-lg font-semibold text-gray-900 flex items-center mb-4">
+          <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg> Filter Berdasarkan Tanggal</h3>
+        </div><!-- Date Created Filters -->
+        <div class="bg-blue-50 rounded-lg p-4 mb-4">
+         <h4 class="text-sm font-semibold text-blue-900 mb-3 flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg> Tanggal Dibuat</h4>
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-2"><label class="block text-sm font-medium text-blue-800">Dari Tanggal</label> <input type="date" id="createdFromDate" class="block w-full px-3 py-2 border border-blue-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white">
+          </div>
+          <div class="space-y-2"><label class="block text-sm font-medium text-blue-800">Sampai Tanggal</label> <input type="date" id="createdToDate" class="block w-full px-3 py-2 border border-blue-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white">
+          </div>
+         </div>
+        </div><!-- Date Updated Filters -->
+        <div class="bg-green-50 rounded-lg p-4">
+         <h4 class="text-sm font-semibold text-green-900 mb-3 flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg> Tanggal Terakhir Diubah</h4>
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-2"><label class="block text-sm font-medium text-green-800">Dari Tanggal</label> <input type="date" id="updatedFromDate" class="block w-full px-3 py-2 border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white">
+          </div>
+          <div class="space-y-2"><label class="block text-sm font-medium text-green-800">Sampai Tanggal</label> <input type="date" id="updatedToDate" class="block w-full px-3 py-2 border border-green-200 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm bg-white">
+          </div>
+         </div>
+        </div>
+       </div><!-- Filter Summary -->
+       <div id="filterSummary" class="hidden mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div class="flex items-center justify-between">
+         <div class="flex items-center">
+          <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg><span class="text-sm font-medium text-yellow-800">Filter Aktif:</span> <span id="activeFiltersText" class="text-sm text-yellow-700 ml-2"></span>
+         </div><button onclick="clearAllFilters()" class="text-sm text-yellow-600 hover:text-yellow-800 font-medium"> Hapus Semua </button>
+        </div>
+       </div>
+      </div>
+     </div><!-- Company List -->
+     <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+       <div class="flex justify-between items-center">
+        <div>
+         <h2 class="text-lg font-medium text-gray-900">Daftar Perusahaan</h2>
+         <p class="text-sm text-gray-500 mt-1">Menampilkan <span id="filteredCount">0</span> dari <span id="totalCount">0</span> perusahaan</p>
+        </div><button id="addCompanyBtn" class="btn-primary text-white px-6 py-2 rounded-xl text-sm font-medium transition duration-200 shadow-lg"> Tambah Perusahaan </button>
+       </div>
+      </div>
+      <div class="overflow-x-auto">
+       <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+         <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Perusahaan</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomor Kontak</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PIC Sales</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Dibuat</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Diubah</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+         </tr>
+        </thead>
+        <tbody id="companyTableBody" class="bg-white divide-y divide-gray-200"><!-- Data will be populated here -->
+        </tbody>
+       </table>
+       <div id="emptyState" class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada data perusahaan</h3>
+        <p class="mt-1 text-sm text-gray-500">Mulai dengan menambahkan perusahaan pertama Anda.</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div><!-- History Modal -->
+  <div id="historyModal" class="hidden fixed z-50 inset-0 overflow-y-auto">
+   <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true" onclick="hideHistoryModal()"></div><span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full z-50">
+     <div class="bg-gradient-to-r from-purple-600 to-purple-800 px-6 py-4 border-b border-purple-700">
+      <div class="flex items-center justify-between">
+       <div class="flex items-center">
+        <div class="w-10 h-10 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg flex items-center justify-center mr-3 shadow-md">
+         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+        </div>
+        <div>
+         <h3 class="text-xl font-bold text-white">Riwayat Perubahan Data</h3>
+         <p class="text-sm text-white text-opacity-90 mt-1" id="historyCompanyName"></p>
+        </div>
+       </div><button onclick="hideHistoryModal()" class="text-white hover:text-gray-200 transition-colors duration-200">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+     </div>
+     <div class="bg-white px-6 py-4" style="max-height: 60%; overflow-y: auto;">
+      <div id="historyContent" class="space-y-4"><!-- History content will be populated here -->
+      </div>
+     </div>
+     <div class="bg-gray-50 px-6 py-4 flex justify-between"><button onclick="exportHistoryPDF()" class="btn-primary px-4 py-2 rounded-md text-sm font-medium flex items-center">
+       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+       </svg> Ekspor ke PDF </button> <button onclick="hideHistoryModal()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"> Tutup </button>
+     </div>
+    </div>
+   </div>
+  </div><!-- Edit Profile Modal -->
+  <div id="editProfileModal" class="hidden fixed z-50 inset-0 overflow-y-auto">
+   <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true" onclick="hideEditProfileModal()"></div><span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full z-50">
+     <div class="bg-gradient-theme px-6 py-4 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+       <div class="flex items-center">
+        <div class="w-10 h-10 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg flex items-center justify-center mr-3 shadow-md">
+         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+         </svg>
+        </div>
+        <h3 class="text-xl font-bold text-white">Edit Profil</h3>
+       </div><button onclick="hideEditProfileModal()" class="text-white hover:text-gray-200 transition-colors duration-200">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+     </div>
+     <form id="editProfileForm" class="bg-white px-6 py-4">
+      <div class="space-y-4"><!-- Profile Photo Section -->
+       <div class="flex flex-col items-center mb-6">
+        <div id="profilePhotoPreview" class="w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center overflow-hidden mb-3 shadow-lg"><span id="profilePhotoInitials" class="text-white text-2xl font-bold">AD</span> <img id="profilePhotoImage" class="hidden w-full h-full object-cover" alt="Profile Photo">
+        </div><label class="cursor-pointer"> <span class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium inline-block"> 📷 Ubah Foto </span> <input type="file" id="profilePhotoInput" accept="image/*" class="hidden"> </label>
+        <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG (Max 2MB)</p>
+       </div><!-- NPP (Read-only) -->
+       <div><label for="editNPP" class="block text-sm font-medium text-gray-700">NPP (Nomor Pokok Pegawai)</label> <input type="text" id="editNPP" readonly class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-600 sm:text-sm cursor-not-allowed">
+        <p class="text-xs text-gray-500 mt-1">NPP tidak dapat diubah</p>
+       </div><!-- Nama Lengkap -->
+       <div><label for="editNama" class="block text-sm font-medium text-gray-700">Nama Lengkap *</label> <input type="text" id="editNama" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+       </div><!-- Email -->
+       <div><label for="editEmail" class="block text-sm font-medium text-gray-700">Email *</label> <input type="email" id="editEmail" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+       </div><!-- Unit Berwenang -->
+       <div><label for="editUnit" class="block text-sm font-medium text-gray-700">Unit Berwenang *</label> <input type="text" id="editUnit" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+       </div><!-- Role (Read-only) -->
+       <div><label for="editRole" class="block text-sm font-medium text-gray-700">Role</label> <input type="text" id="editRole" readonly class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-600 sm:text-sm cursor-not-allowed">
+        <p class="text-xs text-gray-500 mt-1">Role tidak dapat diubah</p>
+       </div><!-- Change Password Section -->
+       <div class="border-t border-gray-200 pt-4 mt-4">
+        <h4 class="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+         <svg class="w-4 h-4 mr-2 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+         </svg> Ubah Password (Opsional)</h4>
+        <div class="space-y-3">
+         <div><label for="editCurrentPassword" class="block text-sm font-medium text-gray-700">Password Lama</label> <input type="password" id="editCurrentPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+         </div>
+         <div><label for="editNewPassword" class="block text-sm font-medium text-gray-700">Password Baru</label> <input type="password" id="editNewPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+         </div>
+         <div><label for="editConfirmPassword" class="block text-sm font-medium text-gray-700">Konfirmasi Password Baru</label> <input type="password" id="editConfirmPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+         </div>
+        </div>
+       </div>
+      </div>
+     </form>
+     <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3"><button type="button" onclick="hideEditProfileModal()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"> Batal </button> <button type="button" id="saveProfileBtn" onclick="saveProfile()" class="btn-primary px-4 py-2 rounded-md text-sm font-medium flex items-center"> <span id="saveProfileText">Simpan Perubahan</span>
+       <div id="saveProfileSpinner" class="hidden ml-2">
+        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+       </div></button>
+     </div>
+    </div>
+   </div>
+  </div><!-- Delete Confirmation Modal -->
+  <div id="deleteConfirmModal" class="hidden fixed z-50 inset-0 overflow-y-auto">
+   <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div><span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full z-50">
+     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <div class="sm:flex sm:items-start">
+       <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+        <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+       </div>
+       <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Konfirmasi Hapus Data</h3>
+        <div class="mt-2">
+         <p class="text-sm text-gray-500">Apakah Anda yakin ingin menghapus data perusahaan <strong id="deleteCompanyName" class="text-gray-900"></strong>?</p>
+         <p class="text-sm text-red-600 mt-2">Tindakan ini tidak dapat dibatalkan!</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"><button type="button" id="confirmDeleteBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"> Ya, Hapus Data </button> <button type="button" id="cancelDeleteBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"> Tidak, Batalkan </button>
+     </div>
+    </div>
+   </div>
+  </div><!-- View Company Modal -->
+  <div id="viewCompanyModal" class="hidden fixed z-50 inset-0 overflow-y-auto">
+   <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true" onclick="hideViewModal()"></div><span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full z-50">
+     <div class="bg-gradient-theme px-6 py-4 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+       <h3 class="text-xl font-bold text-white">Detail Perusahaan</h3><button onclick="hideViewModal()" class="text-white hover:text-gray-200 transition-colors duration-200">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+     </div>
+     <div class="bg-white px-6 py-4" style="max-height: 70%; overflow-y: auto;">
+      <div id="viewCompanyContent" class="space-y-6"><!-- Content will be populated by JavaScript -->
+      </div>
+     </div>
+    <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+        <button id="editFromViewBtn"
+        onclick="editFromView()"
+        class="btn-primary px-4 py-2 rounded-md text-sm font-medium">
+        Edit Data
+    </button>
+</div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Company Modal (Add/Edit) -->
+  <div id="companyModal" class="hidden fixed z-50 inset-0 overflow-y-auto">
+   <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true" onclick="hideCompanyModal()"></div><span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full z-50">
+     <div class="bg-gradient-theme px-6 py-4 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+       <h3 id="companyModalTitle" class="text-xl font-bold text-white">Tambah Data Perusahaan</h3><button id="closeCompanyBtnHeader" class="text-white hover:text-gray-200 transition-colors duration-200">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+     </div><!-- Tab Navigation -->
+     <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+      <nav class="flex space-x-2"><button id="tab-info" class="tab-button px-4 py-2 text-sm font-medium rounded-lg bg-white text-blue-600 shadow-md"> Info Dasar </button> <button id="tab-legal" class="tab-button px-4 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-800 hover:bg-white hover:bg-opacity-50"> Legal &amp; Dokumen </button> <button id="tab-risk" class="tab-button px-4 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-800 hover:bg-white hover:bg-opacity-50"> Risk &amp; Fee </button> <button id="tab-people" class="tab-button px-4 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-800 hover:bg-white hover:bg-opacity-50"> Pejabat &amp; PIC </button>
+      </nav>
+     </div>
+     <form id="companyForm" class="bg-white px-6 py-4" style="max-height: 60%; overflow-y: auto;"><!-- Tab 1: Info Dasar -->
+      <div id="content-info" class="tab-content space-y-4">
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label for="companyName" class="block text-sm font-medium text-gray-700">Nama Perusahaan *</label> <input type="text" id="companyName" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="kodeSwift" class="block text-sm font-medium text-gray-700">Kode SWIFT</label> <input type="text" id="kodeSwift" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div><label for="kota" class="block text-sm font-medium text-gray-700">Kota</label> <input type="text" id="kota" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="provinsi" class="block text-sm font-medium text-gray-700">Provinsi</label> <input type="text" id="provinsi" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="negara" class="block text-sm font-medium text-gray-700">Negara</label> <input type="text" id="negara" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div><label for="kodePos" class="block text-sm font-medium text-gray-700">Kode Pos</label> <input type="text" id="kodePos" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="nomorTelepon" class="block text-sm font-medium text-gray-700">Nomor Telepon</label> <input type="tel" id="nomorTelepon" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="nomorFaksimile" class="block text-sm font-medium text-gray-700">Nomor Faksimile</label> <input type="tel" id="nomorFaksimile" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+       </div>
+       <div><label for="jenisUsaha" class="block text-sm font-medium text-gray-700">Jenis Usaha</label> <select id="jenisUsaha" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"> <option value="">Pilih Jenis Usaha</option> <option value="Bank">Bank</option> <option value="Asuransi">Asuransi</option> <option value="Sekuritas">Sekuritas</option> <option value="Investment Management">Investment Management</option> <option value="Lainnya">Lainnya</option> </select>
+       </div>
+       <div><label class="block text-sm font-medium text-gray-700 mb-2">Produk/Jasa</label>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3"><label class="flex items-center"> <input type="checkbox" id="produk-custody" value="Custody" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="ml-2 text-sm text-gray-700">Custody</span> </label> <label class="flex items-center"> <input type="checkbox" id="produk-subcustody" value="Sub Custody" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="ml-2 text-sm text-gray-700">Sub Custody</span> </label> <label class="flex items-center"> <input type="checkbox" id="produk-fund-admin" value="Fund Administration" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="ml-2 text-sm text-gray-700">Fund Administration</span> </label> <label class="flex items-center"> <input type="checkbox" id="produk-transfer-agent" value="Transfer Agent" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="ml-2 text-sm text-gray-700">Transfer Agent</span> </label> <label class="flex items-center"> <input type="checkbox" id="produk-lainnya" value="Lainnya" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="ml-2 text-sm text-gray-700">Lainnya</span> </label>
+        </div>
+       </div>
+      </div><!-- Tab 2: Legal & Dokumen -->
+      <div id="content-legal" class="tab-content hidden space-y-4">
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label for="nomorAnggaranDasar" class="block text-sm font-medium text-gray-700">Nomor Anggaran Dasar</label> <input type="text" id="nomorAnggaranDasar" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="tempatPendirian" class="block text-sm font-medium text-gray-700">Tempat Pendirian</label> <input type="text" id="tempatPendirian" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label for="tanggalPendirian" class="block text-sm font-medium text-gray-700">Tanggal Pendirian</label> <input type="date" id="tanggalPendirian" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="npwp" class="block text-sm font-medium text-gray-700">NPWP</label> <input type="text" id="npwp" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+       </div>
+       <div><label for="suratIzinUsaha" class="block text-sm font-medium text-gray-700">Surat Izin Usaha</label> <input type="text" id="suratIzinUsaha" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label for="tanggalTerbitSIU" class="block text-sm font-medium text-gray-700">Tanggal Terbit SIU</label> <input type="date" id="tanggalTerbitSIU" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="masaBerlakuSIU" class="block text-sm font-medium text-gray-700">Masa Berlaku SIU</label> <input type="date" id="masaBerlakuSIU" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+       </div>
+      </div><!-- Tab 3: Risk & Fee -->
+      <div id="content-risk" class="tab-content hidden space-y-4">
+       <div><label for="clientRisk" class="block text-sm font-medium text-gray-700">Client Risk</label> <select id="clientRisk" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"> <option value="">Pilih Risk Level</option> <option value="Low">Low</option> <option value="Medium">Medium</option> <option value="High">High</option> </select>
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label for="tanggalJatuhTempo" class="block text-sm font-medium text-gray-700">Tanggal Jatuh Tempo</label> <input type="date" id="tanggalJatuhTempo" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div><label for="nominalFee" class="block text-sm font-medium text-gray-700">Nominal Fee</label> <input type="text" id="nominalFee" placeholder="Rp 0" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+       </div>
+       <div><label for="companyStatus" class="block text-sm font-medium text-gray-700">Status Perusahaan</label> <select id="companyStatus" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"> <option value="Aktif">Aktif</option> <option value="Nonaktif">Nonaktif</option> </select>
+       </div>
+       <div><label for="catatan" class="block text-sm font-medium text-gray-700">Catatan</label> <textarea id="catatan" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+       </div>
+      </div><!-- Tab 4: Pejabat & PIC -->
+      <div id="content-people" class="tab-content hidden space-y-6"><!-- Pejabat Berwenang Section -->
+       <div class="border border-gray-200 rounded-lg p-4">
+        <div class="flex justify-between items-center mb-3">
+         <h4 class="text-sm font-semibold text-gray-700">Pejabat Berwenang</h4><button type="button" id="addPejabatBtn" class="text-sm text-blue-600 hover:text-blue-800 font-medium">+ Tambah</button>
+        </div>
+        <div id="pejabatForm" class="hidden mb-3 p-3 bg-gray-50 rounded-lg space-y-2"><input type="text" id="namaPejabat" placeholder="Nama Lengkap" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm"> <input type="text" id="jabatanPejabat" placeholder="Jabatan" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm"> <input type="text" id="nomorIdentitasPejabat" placeholder="Nomor Identitas" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+         <div class="flex space-x-2"><button type="button" id="savePejabatBtn" class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-md text-sm hover:bg-blue-700">Simpan</button> <button type="button" id="cancelPejabatBtn" class="flex-1 bg-gray-300 text-gray-700 px-3 py-2 rounded-md text-sm hover:bg-gray-400">Batal</button>
+         </div>
+        </div>
+        <div class="overflow-x-auto">
+         <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+           <tr>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">No</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Nama</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Jabatan</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">No. Identitas</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Aksi</th>
+           </tr>
+          </thead>
+          <tbody id="pejabatTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+         </table>
+         <div id="emptyPejabat" class="text-center py-4 text-sm text-gray-500">
+          Belum ada data pejabat
+         </div>
+        </div>
+       </div><!-- Pemegang Saham Section -->
+       <div class="border border-gray-200 rounded-lg p-4">
+        <div class="flex justify-between items-center mb-3">
+         <h4 class="text-sm font-semibold text-gray-700">Pemegang Saham</h4><button type="button" id="addPemegangSahamBtn" class="text-sm text-blue-600 hover:text-blue-800 font-medium">+ Tambah</button>
+        </div>
+        <div id="pemegangSahamForm" class="hidden mb-3 p-3 bg-gray-50 rounded-lg space-y-2"><input type="text" id="namaPemegangSaham" placeholder="Nama Lengkap" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm"> <input type="text" id="jabatanPemegangSaham" placeholder="Jabatan" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm"> <input type="text" id="persentaseSaham" placeholder="Persentase Saham (%)" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm"> <input type="text" id="identitasPemegangSaham" placeholder="Nomor Identitas" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+         <div class="flex space-x-2"><button type="button" id="savePemegangSahamBtn" class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-md text-sm hover:bg-blue-700">Simpan</button> <button type="button" id="cancelPemegangSahamBtn" class="flex-1 bg-gray-300 text-gray-700 px-3 py-2 rounded-md text-sm hover:bg-gray-400">Batal</button>
+         </div>
+        </div>
+        <div class="overflow-x-auto">
+         <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+           <tr>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">No</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Nama</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Jabatan</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Saham (%)</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Identitas</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Aksi</th>
+           </tr>
+          </thead>
+          <tbody id="pemegangSahamTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+         </table>
+         <div id="emptyPemegangSaham" class="text-center py-4 text-sm text-gray-500">
+          Belum ada data pemegang saham
+         </div>
+        </div>
+       </div><!-- PIC Section -->
+       <div class="border border-gray-200 rounded-lg p-4">
+        <div class="flex justify-between items-center mb-3">
+         <h4 class="text-sm font-semibold text-gray-700">PIC (Person In Charge)</h4><button type="button" id="addPICBtn" class="text-sm text-blue-600 hover:text-blue-800 font-medium">+ Tambah</button>
+        </div>
+        <div id="picForm" class="hidden mb-3 p-3 bg-gray-50 rounded-lg space-y-2"><input type="text" id="namaPIC" placeholder="Nama Lengkap" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm"> <input type="email" id="emailPIC" placeholder="Email" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm"> <input type="tel" id="teleponPIC" placeholder="Nomor Telepon" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+         <div class="flex space-x-2"><button type="button" id="savePICBtn" class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-md text-sm hover:bg-blue-700">Simpan</button> <button type="button" id="cancelPICBtn" class="flex-1 bg-gray-300 text-gray-700 px-3 py-2 rounded-md text-sm hover:bg-gray-400">Batal</button>
+         </div>
+        </div>
+        <div class="overflow-x-auto">
+         <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+           <tr>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">No</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Nama</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Email</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Telepon</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Aksi</th>
+           </tr>
+          </thead>
+          <tbody id="picTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+         </table>
+         <div id="emptyPIC" class="text-center py-4 text-sm text-gray-500">
+          Belum ada data PIC
+         </div>
+        </div>
+       </div><!-- Dokumen Pendukung Section -->
+       <div class="border border-gray-200 rounded-lg p-4">
+        <div class="flex justify-between items-center mb-3">
+         <h4 class="text-sm font-semibold text-gray-700">Dokumen Pendukung</h4><button type="button" id="addDokumenBtn" class="text-sm text-blue-600 hover:text-blue-800 font-medium">+ Tambah</button>
+        </div>
+        <div id="dokumenForm" class="hidden mb-3 p-3 bg-gray-50 rounded-lg space-y-2"><input type="text" id="namaDokumen" placeholder="Nama Dokumen" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm"> <input type="date" id="tanggalUpload" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+         <div class="flex space-x-2"><button type="button" id="saveDokumenBtn" class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-md text-sm hover:bg-blue-700">Simpan</button> <button type="button" id="cancelDokumenBtn" class="flex-1 bg-gray-300 text-gray-700 px-3 py-2 rounded-md text-sm hover:bg-gray-400">Batal</button>
+         </div>
+        </div>
+        <div class="overflow-x-auto">
+         <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+           <tr>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">No</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Nama Dokumen</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Tanggal Upload</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Aksi</th>
+           </tr>
+          </thead>
+          <tbody id="dokumenTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+         </table>
+         <div id="emptyDokumen" class="text-center py-4 text-sm text-gray-500">
+          Belum ada dokumen
+         </div>
+        </div>
+       </div>
+      </div>
+     </form>
+     <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3"><button type="button" id="closeCompanyBtn" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"> Batal </button> <button type="button" id="saveCompanyBtn" class="btn-primary px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center"> <span id="saveCompanyText">Simpan Data</span>
+       <div id="saveCompanySpinner" class="hidden ml-2">
+        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+       </div></button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        // Global variables
+        let companies = [];
+        let filteredCompanies = [];
+        let currentEditingId = null;
+        let currentUser = null;
+        let pejabatList = [];
+        let pemegangSahamList = [];
+        let picList = [];
+        let dokumenList = [];
+        let currentHistoryCompanyId = null;
+
+        // Default configuration for Element SDK
+        const defaultConfig = {
+            system_title: "Sistem Operasional Perusahaan"
+        };
+
+        // Initialize Element SDK
+        async function initializeSDK() {
+            try {
+                if (window.elementSdk) {
+                    await window.elementSdk.init({
+                        defaultConfig: defaultConfig,
+                        onConfigChange: async (config) => {
+                            const titleElement = document.getElementById('loginTitle');
+                            const dashboardTitleElement = document.getElementById('dashboardTitle');
+                            
+                            if (titleElement) {
+                                titleElement.textContent = config.system_title || defaultConfig.system_title;
+                            }
+                            if (dashboardTitleElement) {
+                                dashboardTitleElement.textContent = config.system_title || defaultConfig.system_title;
+                            }
+                        },
+                        mapToCapabilities: (config) => ({
+                            recolorables: [],
+                            borderables: [],
+                            fontEditable: undefined,
+                            fontSizeable: undefined
+                        }),
+                        mapToEditPanelValues: (config) => new Map([
+                            ["system_title", config.system_title || defaultConfig.system_title]
+                        ])
+                    });
+                }
+            } catch (error) {
+                console.error("Error initializing SDK:", error);
+            }
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const savedData = localStorage.getItem('companies');
+            if (savedData) {
+                companies = JSON.parse(savedData);
+            } else {
+                // Generate 10 sample companies if no data exists
+                companies = generateSampleData();
+                saveData();
+            }
+            filteredCompanies = [...companies];
+            updateDashboardStats();
+            renderCompanyTable();
+            updateFilterCounts();
+        }
+
+        // Generate sample data
+        function generateSampleData() {
+            const sampleCompanies = [
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Bank Mandiri (Persero) Tbk',
+                    kode_swift: 'BMRIIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '10220',
+                    nomor_telepon: '021-5299-7777',
+                    nomor_faksimile: '021-5299-7735',
+                    jenis_usaha: 'Bank',
+                    produk_jasa: 'Custody, Sub Custody',
+                    nomor_anggaran_dasar: 'AHU-0123456.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '1998-10-02',
+                    npwp: '01.001.123.4-567.000',
+                    surat_izin_usaha: 'KEP-001/PBI/2020',
+                    tanggal_terbit_siu: '2020-01-15',
+                    masa_berlaku_siu: '2025-01-15',
+                    client_risk: 'Low',
+                    tanggal_jatuh_tempo: '2024-12-31',
+                    nominal_fee: 'Rp 50.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Darmawan Junaidi', jabatan: 'Direktur Utama', nomor_identitas: '3171010101800001' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'Pemerintah RI', jabatan: 'Pemegang Saham Mayoritas', persentase: '60%', identitas: 'NPWP-GOV-001' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Siti Nurhaliza', email: 'siti.n@bankmandiri.co.id', telepon: '021-5299-7788' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Akta Pendirian Perusahaan', tanggal: '2020-01-10' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Bank BUMN terbesar di Indonesia',
+                    tanggal_dibuat: '2024-01-15T08:00:00.000Z',
+                    tanggal_diubah: '2024-01-15T08:00:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Bank Central Asia Tbk',
+                    kode_swift: 'CENAIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '10310',
+                    nomor_telepon: '021-2358-8000',
+                    nomor_faksimile: '021-2358-8300',
+                    jenis_usaha: 'Bank',
+                    produk_jasa: 'Custody, Fund Administration',
+                    nomor_anggaran_dasar: 'AHU-0234567.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '1957-02-21',
+                    npwp: '01.002.234.5-678.000',
+                    surat_izin_usaha: 'KEP-002/PBI/2020',
+                    tanggal_terbit_siu: '2020-02-20',
+                    masa_berlaku_siu: '2025-02-20',
+                    client_risk: 'Low',
+                    tanggal_jatuh_tempo: '2024-11-30',
+                    nominal_fee: 'Rp 75.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Jahja Setiaatmadja', jabatan: 'Presiden Direktur', nomor_identitas: '3171020202750002' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'PT Dwimuria Investama Andalan', jabatan: 'Pemegang Saham Pengendali', persentase: '51.15%', identitas: 'NPWP-DIA-002' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Ahmad Fauzi', email: 'ahmad.f@bca.co.id', telepon: '021-2358-8100' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Laporan Keuangan 2023', tanggal: '2024-01-20' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Bank swasta terbesar di Indonesia',
+                    tanggal_dibuat: '2024-01-20T09:00:00.000Z',
+                    tanggal_diubah: '2024-01-20T09:00:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Asuransi Allianz Life Indonesia',
+                    kode_swift: 'ALLZIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '12920',
+                    nomor_telepon: '021-2926-8888',
+                    nomor_faksimile: '021-2926-8899',
+                    jenis_usaha: 'Asuransi',
+                    produk_jasa: 'Lainnya',
+                    nomor_anggaran_dasar: 'AHU-0345678.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '1996-09-06',
+                    npwp: '01.003.345.6-789.000',
+                    surat_izin_usaha: 'KEP-003/OJK/2020',
+                    tanggal_terbit_siu: '2020-03-10',
+                    masa_berlaku_siu: '2025-03-10',
+                    client_risk: 'Medium',
+                    tanggal_jatuh_tempo: '2024-10-31',
+                    nominal_fee: 'Rp 40.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Handojo Gunawan Liem', jabatan: 'Presiden Direktur', nomor_identitas: '3171030303700003' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'Allianz SE Germany', jabatan: 'Pemegang Saham Mayoritas', persentase: '99.99%', identitas: 'FOREIGN-ALZ-001' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Linda Wijaya', email: 'linda.w@allianz.co.id', telepon: '021-2926-8801' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Polis Asuransi Standard', tanggal: '2024-02-01' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Perusahaan asuransi jiwa terkemuka',
+                    tanggal_dibuat: '2024-02-01T10:00:00.000Z',
+                    tanggal_diubah: '2024-02-01T10:00:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Manulife Aset Manajemen Indonesia',
+                    kode_swift: 'MANUIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '12940',
+                    nomor_telepon: '021-2555-7788',
+                    nomor_faksimile: '021-2555-7799',
+                    jenis_usaha: 'Investment Management',
+                    produk_jasa: 'Fund Administration, Transfer Agent',
+                    nomor_anggaran_dasar: 'AHU-0456789.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '2003-03-18',
+                    npwp: '01.004.456.7-890.000',
+                    surat_izin_usaha: 'KEP-004/OJK/2020',
+                    tanggal_terbit_siu: '2020-04-15',
+                    masa_berlaku_siu: '2025-04-15',
+                    client_risk: 'Low',
+                    tanggal_jatuh_tempo: '2024-09-30',
+                    nominal_fee: 'Rp 60.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Legowo Kusumonegoro', jabatan: 'Presiden Direktur', nomor_identitas: '3171040404680004' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'Manulife Financial Corporation', jabatan: 'Pemegang Saham Mayoritas', persentase: '99%', identitas: 'FOREIGN-MFC-001' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Rina Kusuma', email: 'rina.k@manulife-asset.co.id', telepon: '021-2555-7701' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Prospektus Reksa Dana', tanggal: '2024-02-15' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Manajer investasi terpercaya',
+                    tanggal_dibuat: '2024-02-15T11:00:00.000Z',
+                    tanggal_diubah: '2024-02-15T11:00:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Bank Rakyat Indonesia (Persero) Tbk',
+                    kode_swift: 'BRINIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '10110',
+                    nomor_telepon: '021-1500-017',
+                    nomor_faksimile: '021-3509-455',
+                    jenis_usaha: 'Bank',
+                    produk_jasa: 'Custody, Sub Custody, Fund Administration',
+                    nomor_anggaran_dasar: 'AHU-0567890.AH.01.01',
+                    tempat_pendirian: 'Purwokerto',
+                    tanggal_pendirian: '1895-12-16',
+                    npwp: '01.005.567.8-901.000',
+                    surat_izin_usaha: 'KEP-005/PBI/2020',
+                    tanggal_terbit_siu: '2020-05-20',
+                    masa_berlaku_siu: '2025-05-20',
+                    client_risk: 'Low',
+                    tanggal_jatuh_tempo: '2024-08-31',
+                    nominal_fee: 'Rp 55.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Sunarso', jabatan: 'Direktur Utama', nomor_identitas: '3171050505650005' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'Pemerintah RI', jabatan: 'Pemegang Saham Mayoritas', persentase: '56.75%', identitas: 'NPWP-GOV-002' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Budi Santoso', email: 'budi.s@bri.co.id', telepon: '021-1500-018' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Annual Report 2023', tanggal: '2024-03-01' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Bank dengan jaringan terluas di Indonesia',
+                    tanggal_dibuat: '2024-03-01T08:30:00.000Z',
+                    tanggal_diubah: '2024-03-01T08:30:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Bahana Sekuritas',
+                    kode_swift: 'BAHNIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '12190',
+                    nomor_telepon: '021-5790-0800',
+                    nomor_faksimile: '021-5790-0900',
+                    jenis_usaha: 'Sekuritas',
+                    produk_jasa: 'Custody, Sub Custody',
+                    nomor_anggaran_dasar: 'AHU-0678901.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '1990-10-14',
+                    npwp: '01.006.678.9-012.000',
+                    surat_izin_usaha: 'KEP-006/OJK/2020',
+                    tanggal_terbit_siu: '2020-06-25',
+                    masa_berlaku_siu: '2025-06-25',
+                    client_risk: 'Medium',
+                    tanggal_jatuh_tempo: '2024-07-31',
+                    nominal_fee: 'Rp 35.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Hary Prasetyo', jabatan: 'Direktur Utama', nomor_identitas: '3171060606720006' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'PT Bahana Pembinaan Usaha Indonesia', jabatan: 'Pemegang Saham Mayoritas', persentase: '99.99%', identitas: 'NPWP-BPUI-001' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Dewi Lestari', email: 'dewi.l@bahana.co.id', telepon: '021-5790-0801' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Izin Usaha Perantara Pedagang Efek', tanggal: '2024-03-15' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Perusahaan sekuritas BUMN',
+                    tanggal_dibuat: '2024-03-15T09:30:00.000Z',
+                    tanggal_diubah: '2024-03-15T09:30:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Prudential Life Assurance',
+                    kode_swift: 'PRUDIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '12950',
+                    nomor_telepon: '021-2995-2888',
+                    nomor_faksimile: '021-2995-2999',
+                    jenis_usaha: 'Asuransi',
+                    produk_jasa: 'Lainnya',
+                    nomor_anggaran_dasar: 'AHU-0789012.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '1995-08-29',
+                    npwp: '01.007.789.0-123.000',
+                    surat_izin_usaha: 'KEP-007/OJK/2020',
+                    tanggal_terbit_siu: '2020-07-30',
+                    masa_berlaku_siu: '2025-07-30',
+                    client_risk: 'Medium',
+                    tanggal_jatuh_tempo: '2024-06-30',
+                    nominal_fee: 'Rp 45.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Jens Reisch', jabatan: 'Presiden Direktur', nomor_identitas: 'KITAS-001-2020' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'Prudential Corporation Asia', jabatan: 'Pemegang Saham Mayoritas', persentase: '99.99%', identitas: 'FOREIGN-PCA-001' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Maya Indah', email: 'maya.i@prudential.co.id', telepon: '021-2995-2801' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Sertifikat ISO 9001', tanggal: '2024-04-01' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Asuransi jiwa dengan produk unit link',
+                    tanggal_dibuat: '2024-04-01T10:30:00.000Z',
+                    tanggal_diubah: '2024-04-01T10:30:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Schroders Investment Management Indonesia',
+                    kode_swift: 'SCROIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '12930',
+                    nomor_telepon: '021-5150-5800',
+                    nomor_faksimile: '021-5150-5900',
+                    jenis_usaha: 'Investment Management',
+                    produk_jasa: 'Fund Administration, Transfer Agent',
+                    nomor_anggaran_dasar: 'AHU-0890123.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '1999-06-15',
+                    npwp: '01.008.890.1-234.000',
+                    surat_izin_usaha: 'KEP-008/OJK/2020',
+                    tanggal_terbit_siu: '2020-08-15',
+                    masa_berlaku_siu: '2025-08-15',
+                    client_risk: 'Low',
+                    tanggal_jatuh_tempo: '2024-05-31',
+                    nominal_fee: 'Rp 50.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Nicky Hogan', jabatan: 'Presiden Direktur', nomor_identitas: 'KITAS-002-2020' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'Schroder Investment Management Limited', jabatan: 'Pemegang Saham Mayoritas', persentase: '99%', identitas: 'FOREIGN-SIML-001' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Andi Wijaya', email: 'andi.w@schroders.com', telepon: '021-5150-5801' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Fund Fact Sheet Q1 2024', tanggal: '2024-04-15' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Manajer investasi global dengan rekam jejak solid',
+                    tanggal_dibuat: '2024-04-15T11:30:00.000Z',
+                    tanggal_diubah: '2024-04-15T11:30:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT Panin Sekuritas Tbk',
+                    kode_swift: 'PANIIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '10350',
+                    nomor_telepon: '021-3199-0000',
+                    nomor_faksimile: '021-3199-0100',
+                    jenis_usaha: 'Sekuritas',
+                    produk_jasa: 'Custody, Sub Custody',
+                    nomor_anggaran_dasar: 'AHU-0901234.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '1989-11-22',
+                    npwp: '01.009.901.2-345.000',
+                    surat_izin_usaha: 'KEP-009/OJK/2019',
+                    tanggal_terbit_siu: '2019-09-20',
+                    masa_berlaku_siu: '2024-09-20',
+                    client_risk: 'High',
+                    tanggal_jatuh_tempo: '2024-04-30',
+                    nominal_fee: 'Rp 30.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Eddy Sugito', jabatan: 'Direktur Utama', nomor_identitas: '3171080808600008' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'PT Bank Pan Indonesia Tbk', jabatan: 'Pemegang Saham Mayoritas', persentase: '75%', identitas: 'NPWP-PANIN-001' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Rudi Hartono', email: 'rudi.h@pans.co.id', telepon: '021-3199-0001' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Laporan Tahunan 2023', tanggal: '2024-05-01' }
+                    ]),
+                    status: 'Nonaktif',
+                    catatan: 'Sedang dalam proses perpanjangan izin',
+                    tanggal_dibuat: '2024-05-01T08:00:00.000Z',
+                    tanggal_diubah: '2024-05-01T08:00:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                },
+                {
+                    id: generateId(),
+                    nama_perusahaan: 'PT AXA Mandiri Financial Services',
+                    kode_swift: 'AXAMIDJA',
+                    kota: 'Jakarta',
+                    provinsi: 'DKI Jakarta',
+                    negara: 'Indonesia',
+                    kode_pos: '12920',
+                    nomor_telepon: '021-2557-6888',
+                    nomor_faksimile: '021-2557-6999',
+                    jenis_usaha: 'Asuransi',
+                    produk_jasa: 'Lainnya',
+                    nomor_anggaran_dasar: 'AHU-1012345.AH.01.01',
+                    tempat_pendirian: 'Jakarta',
+                    tanggal_pendirian: '2003-06-09',
+                    npwp: '01.010.012.3-456.000',
+                    surat_izin_usaha: 'KEP-010/OJK/2020',
+                    tanggal_terbit_siu: '2020-10-25',
+                    masa_berlaku_siu: '2025-10-25',
+                    client_risk: 'Medium',
+                    tanggal_jatuh_tempo: '2024-12-31',
+                    nominal_fee: 'Rp 42.000.000',
+                    pejabat_berwenang: JSON.stringify([
+                        { id: generateId(), nama: 'Handojo Gunawan', jabatan: 'Presiden Direktur', nomor_identitas: '3171090909690009' }
+                    ]),
+                    pemegang_saham: JSON.stringify([
+                        { id: generateId(), nama: 'PT Bank Mandiri (Persero) Tbk', jabatan: 'Pemegang Saham', persentase: '51%', identitas: 'NPWP-MANDIRI-001' },
+                        { id: generateId(), nama: 'AXA Group', jabatan: 'Pemegang Saham', persentase: '49%', identitas: 'FOREIGN-AXA-001' }
+                    ]),
+                    pic_data: JSON.stringify([
+                        { id: generateId(), nama: 'Fitri Rahmawati', email: 'fitri.r@axa-mandiri.co.id', telepon: '021-2557-6801' }
+                    ]),
+                    dokumen_pendukung: JSON.stringify([
+                        { id: generateId(), nama: 'Product Disclosure Statement', tanggal: '2024-05-15' }
+                    ]),
+                    status: 'Aktif',
+                    catatan: 'Joint venture antara Bank Mandiri dan AXA',
+                    tanggal_dibuat: '2024-05-15T09:00:00.000Z',
+                    tanggal_diubah: '2024-05-15T09:00:00.000Z',
+                    diubah_oleh: 'System',
+                    history: []
+                }
+            ];
+
+            return sampleCompanies;
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('companies', JSON.stringify(companies));
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSDK();
+            loadData();
+            setupEventListeners();
+            
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainPage();
+            }
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Login form
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+            
+            // Profile dropdown
+            const profileButton = document.getElementById('profileButton');
+            if (profileButton) {
+                profileButton.addEventListener('click', toggleProfileDropdown);
+            }
+            
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener('click', showEditProfileModal);
+            }
+            
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', handleLogout);
+            }
+            
+            // Company modal
+            const addCompanyBtn = document.getElementById('addCompanyBtn');
+            if (addCompanyBtn) {
+                addCompanyBtn.addEventListener('click', showAddCompanyModal);
+            }
+            
+            const closeCompanyBtn = document.getElementById('closeCompanyBtn');
+            if (closeCompanyBtn) {
+                closeCompanyBtn.addEventListener('click', hideCompanyModal);
+            }
+            
+            const closeCompanyBtnHeader = document.getElementById('closeCompanyBtnHeader');
+            if (closeCompanyBtnHeader) {
+                closeCompanyBtnHeader.addEventListener('click', hideCompanyModal);
+            }
+            
+            const saveCompanyBtn = document.getElementById('saveCompanyBtn');
+            if (saveCompanyBtn) {
+                saveCompanyBtn.addEventListener('click', saveCompany);
+            }
+            
+            // Tab navigation
+            setupTabNavigation();
+            
+            // Search and filters
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', applyFilters);
+            }
+            
+            const statusFilter = document.getElementById('statusFilter');
+            if (statusFilter) {
+                statusFilter.addEventListener('change', applyFilters);
+            }
+            
+            const jenisUsahaFilter = document.getElementById('jenisUsahaFilter');
+            if (jenisUsahaFilter) {
+                jenisUsahaFilter.addEventListener('change', applyFilters);
+            }
+            
+            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+            if (clearFiltersBtn) {
+                clearFiltersBtn.addEventListener('click', clearAllFilters);
+            }
+            
+            // Advanced filters
+            const toggleAdvancedFilter = document.getElementById('toggleAdvancedFilter');
+            if (toggleAdvancedFilter) {
+                toggleAdvancedFilter.addEventListener('click', toggleAdvancedFilters);
+            }
+            
+            const createdFromDate = document.getElementById('createdFromDate');
+            if (createdFromDate) {
+                createdFromDate.addEventListener('change', applyFilters);
+            }
+            
+            const createdToDate = document.getElementById('createdToDate');
+            if (createdToDate) {
+                createdToDate.addEventListener('change', applyFilters);
+            }
+            
+            const updatedFromDate = document.getElementById('updatedFromDate');
+            if (updatedFromDate) {
+                updatedFromDate.addEventListener('change', applyFilters);
+            }
+            
+            const updatedToDate = document.getElementById('updatedToDate');
+            if (updatedToDate) {
+                updatedToDate.addEventListener('change', applyFilters);
+            }
+            
+            // Close modals when clicking outside
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('modal-backdrop')) {
+                    hideAllModals();
+                }
+            });
+
+            // Close delete modal when clicking backdrop
+            document.getElementById('deleteConfirmModal').addEventListener('click', function(event) {
+                if (event.target === this) {
+                    this.classList.add('hidden');
+                    companyToDelete = null;
+                }
+            });
+
+            // Setup people management
+            setupPeopleManagement();
+        }
+
+        // User database with roles
+        const users = {
+            'admin': {
+                password: 'admin123',
+                nama: 'Administrator',
+                email: 'admin@perusahaan.com',
+                unitBerwenang: 'IT Department',
+                role: 'admin'
+            },
+            'pegawai': {
+                password: 'pegawai123',
+                nama: 'Pegawai Operasional',
+                email: 'pegawai@perusahaan.com',
+                unitBerwenang: 'Operational Department',
+                role: 'pegawai'
+            },
+            'manajer': {
+                password: 'manajer123',
+                nama: 'Manajer',
+                email: 'manajer@perusahaan.com',
+                unitBerwenang: 'Management',
+                role: 'manajer'
+            }
+        };
+
+        // Check user permissions
+        function canEdit() {
+            return currentUser && (currentUser.role === 'admin' || currentUser.role === 'pegawai');
+        }
+
+        function isViewOnly() {
+            return currentUser && currentUser.role === 'manajer';
+        }
+
+        // Handle login
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const npp = document.getElementById('npp').value;
+            const password = document.getElementById('password').value;
+            
+            // Show loading state
+            const loginButton = document.getElementById('loginButtonText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            loginButton.textContent = 'Memproses...';
+            loginSpinner.classList.remove('hidden');
+            
+            // Simulate login delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Check credentials
+            const user = users[npp];
+            if (user && user.password === password) {
+                currentUser = {
+                    npp: npp,
+                    nama: user.nama,
+                    email: user.email,
+                    unitBerwenang: user.unitBerwenang,
+                    role: user.role,
+                    lastActive: new Date().toISOString()
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showMainPage();
+            } else {
+                // Reset loading state
+                loginButton.textContent = 'Masuk';
+                loginSpinner.classList.add('hidden');
+                
+                // Show error message
+                showToast('NPP atau password salah!', 'error');
+            }
+        }
+
+        // Show main page
+        function showMainPage() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('mainPage').classList.remove('hidden');
+            
+            // Update profile display
+            updateProfileDisplay();
+            updateHeaderProfilePhoto();
+            
+            // Apply role-based UI restrictions
+            applyRoleRestrictions();
+        }
+
+        // Apply role-based UI restrictions
+        function applyRoleRestrictions() {
+            const addCompanyBtn = document.getElementById('addCompanyBtn');
+            
+            if (isViewOnly()) {
+                // Hide add button for view-only users
+                if (addCompanyBtn) {
+                    addCompanyBtn.style.display = 'none';
+                }
+                
+                // Show view-only badge
+                const statusElement = document.querySelector('header .flex.items-center.space-x-4 span');
+                if (statusElement) {
+                    statusElement.innerHTML = 'Status: <span class="font-medium text-white">Manajer (Hanya Lihat)</span>';
+                }
+            } else {
+                // Show add button for editors
+                if (addCompanyBtn) {
+                    addCompanyBtn.style.display = 'block';
+                }
+            }
+        }
+
+        // Update profile display
+        function updateProfileDisplay() {
+            if (currentUser) {
+                const initials = currentUser.nama.split(' ').map(n => n[0]).join('').toUpperCase();
+                document.getElementById('headerProfileInitials').textContent = initials;
+            }
+        }
+
+        // Toggle profile dropdown
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Handle logout
+        function handleLogout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('mainPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            
+            // Reset form
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginButtonText').textContent = 'Masuk';
+            document.getElementById('loginSpinner').classList.add('hidden');
+        }
+
+        // Show add company modal
+        function showAddCompanyModal() {
+            // Check if user has edit permission
+            if (!canEdit()) {
+                showToast('Anda tidak memiliki izin untuk menambah data', 'error');
+                return;
+            }
+
+            currentEditingId = null;
+            document.getElementById('companyModalTitle').textContent = 'Tambah Data Perusahaan';
+            document.getElementById('saveCompanyText').textContent = 'Simpan Data';
+            
+            // Reset form
+            document.getElementById('companyForm').reset();
+            document.getElementById('companyStatus').value = 'Aktif';
+            
+            // Reset people lists
+            pejabatList = [];
+            pemegangSahamList = [];
+            picList = [];
+            dokumenList = [];
+            updatePeopleDisplay();
+            
+            // Show first tab
+            showTab('info');
+            
+            document.getElementById('companyModal').classList.remove('hidden');
+        }
+
+        // Hide company modal
+        function hideCompanyModal() {
+            document.getElementById('companyModal').classList.add('hidden');
+        }
+
+        // Hide all modals
+        function hideAllModals() {
+            document.getElementById('companyModal').classList.add('hidden');
+            document.getElementById('viewCompanyModal').classList.add('hidden');
+            document.getElementById('profileDropdown').classList.add('hidden');
+        }
+
+        // View company details
+        function viewCompany(id) {
+            const company = companies.find(c => c.id === id);
+            if (!company) return;
+
+            // Store current viewing company ID
+            window.currentViewingId = id;
+
+            // Show/hide edit button based on role
+            setTimeout(() => {
+                const editBtn = document.getElementById('editFromViewBtn');
+                if (editBtn) {
+                    editBtn.style.display = canEdit() ? 'block' : 'none';
+                }
+            }, 100);
+
+            const content = document.getElementById('viewCompanyContent');
+            
+            // Parse people data
+            let pejabatData = [];
+            let pemegangSahamData = [];
+            let picData = [];
+            let dokumenData = [];
+            
+            try {
+                pejabatData = JSON.parse(company.pejabat_berwenang || '[]');
+                pemegangSahamData = JSON.parse(company.pemegang_saham || '[]');
+                picData = JSON.parse(company.pic_data || '[]');
+                dokumenData = JSON.parse(company.dokumen_pendukung || '[]');
+            } catch (error) {
+                console.error('Error parsing data:', error);
+            }
+
+            content.innerHTML = `
+                <!-- Info Dasar -->
+                <div class="border border-gray-200 rounded-lg p-5 bg-blue-50">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Informasi Dasar
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Nama Perusahaan</label>
+                            <p class="mt-1 text-sm text-gray-900 font-semibold">${company.nama_perusahaan || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Kode SWIFT</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.kode_swift || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Kota</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.kota || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Provinsi</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.provinsi || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Negara</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.negara || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Kode Pos</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.kode_pos || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Nomor Telepon</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.nomor_telepon || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Nomor Faksimile</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.nomor_faksimile || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Jenis Usaha</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.jenis_usaha || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Produk/Jasa</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.produk_jasa || '-'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legal & Dokumen -->
+                <div class="border border-gray-200 rounded-lg p-5 bg-green-50">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Legal & Dokumen
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Nomor Anggaran Dasar</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.nomor_anggaran_dasar || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Tempat Pendirian</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.tempat_pendirian || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Tanggal Pendirian</label>
+                            <p class="mt-1 text-sm text-gray-900">${formatDate(company.tanggal_pendirian)}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">NPWP</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.npwp || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Surat Izin Usaha</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.surat_izin_usaha || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Tanggal Terbit SIU</label>
+                            <p class="mt-1 text-sm text-gray-900">${formatDate(company.tanggal_terbit_siu)}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Masa Berlaku SIU</label>
+                            <p class="mt-1 text-sm text-gray-900">${formatDate(company.masa_berlaku_siu)}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk & Fee -->
+                <div class="border border-gray-200 rounded-lg p-5 bg-yellow-50">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Risk & Fee
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Client Risk</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.client_risk || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Tanggal Jatuh Tempo</label>
+                            <p class="mt-1 text-sm text-gray-900">${formatDate(company.tanggal_jatuh_tempo)}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Nominal Fee</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.nominal_fee || '-'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Status Perusahaan</label>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${company.status === 'Aktif' ? 'badge-active' : 'badge-inactive'}">
+                                ${company.status || 'Tidak Diketahui'}
+                            </span>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-600">Catatan</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.catatan || '-'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pejabat Berwenang -->
+                <div class="border border-gray-200 rounded-lg p-5 bg-purple-50">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Pejabat Berwenang
+                    </h4>
+                    ${pejabatData.length > 0 ? `
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-purple-100">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">No</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Nama</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Jabatan</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">No. Identitas</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${pejabatData.map((p, i) => `
+                                        <tr>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${i + 1}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.nama}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.jabatan}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.nomor_identitas}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    ` : '<p class="text-sm text-gray-500">Tidak ada data pejabat berwenang</p>'}
+                </div>
+
+                <!-- Pemegang Saham -->
+                <div class="border border-gray-200 rounded-lg p-5 bg-indigo-50">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Pemegang Saham
+                    </h4>
+                    ${pemegangSahamData.length > 0 ? `
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-indigo-100">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">No</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Nama</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Jabatan</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Saham (%)</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Identitas</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${pemegangSahamData.map((p, i) => `
+                                        <tr>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${i + 1}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.nama}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.jabatan}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.persentase}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.identitas}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    ` : '<p class="text-sm text-gray-500">Tidak ada data pemegang saham</p>'}
+                </div>
+
+                <!-- PIC -->
+                <div class="border border-gray-200 rounded-lg p-5 bg-pink-50">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        PIC (Person In Charge)
+                    </h4>
+                    ${picData.length > 0 ? `
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-pink-100">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">No</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Nama</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Email</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Telepon</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${picData.map((p, i) => `
+                                        <tr>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${i + 1}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.nama}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.email}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${p.telepon}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    ` : '<p class="text-sm text-gray-500">Tidak ada data PIC</p>'}
+                </div>
+
+                <!-- Dokumen Pendukung -->
+                <div class="border border-gray-200 rounded-lg p-5 bg-orange-50">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        Dokumen Pendukung
+                    </h4>
+                    ${dokumenData.length > 0 ? `
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-orange-100">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">No</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Nama Dokumen</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-700">Tanggal Upload</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${dokumenData.map((d, i) => `
+                                        <tr>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${i + 1}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${d.nama}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">${formatDate(d.tanggal)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    ` : '<p class="text-sm text-gray-500">Tidak ada dokumen pendukung</p>'}
+                </div>
+
+                <!-- Metadata -->
+                <div class="border border-gray-200 rounded-lg p-5 bg-gray-50">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Informasi Sistem
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Tanggal Dibuat</label>
+                            <p class="mt-1 text-sm text-gray-900">${formatDate(company.tanggal_dibuat)}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Terakhir Diubah</label>
+                            <p class="mt-1 text-sm text-gray-900">${formatDate(company.tanggal_diubah)}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Diubah Oleh</label>
+                            <p class="mt-1 text-sm text-gray-900">${company.diubah_oleh || '-'}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('viewCompanyModal').classList.remove('hidden');
+        }
+
+        // Hide view modal
+        function hideViewModal() {
+            document.getElementById('viewCompanyModal').classList.add('hidden');
+            window.currentViewingId = null;
+        }
+
+        // Edit from view modal
+        function editFromView() {
+            if (window.currentViewingId) {
+                hideViewModal();
+                editCompany(window.currentViewingId);
+            }
+        }
+
+        // Setup tab navigation
+        function setupTabNavigation() {
+            const tabs = ['info', 'legal', 'risk', 'people'];
+            
+            tabs.forEach(tab => {
+                document.getElementById(`tab-${tab}`).addEventListener('click', () => showTab(tab));
+            });
+        }
+
+        // Show tab
+        function showTab(activeTab) {
+            const tabs = ['info', 'legal', 'risk', 'people'];
+            
+            tabs.forEach(tab => {
+                const tabButton = document.getElementById(`tab-${tab}`);
+                const tabContent = document.getElementById(`content-${tab}`);
+                
+                if (tab === activeTab) {
+                    tabButton.classList.add('bg-white', 'text-blue-600', 'shadow-md');
+                    tabButton.classList.remove('text-gray-600', 'hover:text-gray-800', 'hover:bg-white', 'hover:bg-opacity-50');
+                    tabContent.classList.remove('hidden');
+                } else {
+                    tabButton.classList.remove('bg-white', 'text-blue-600', 'shadow-md');
+                    tabButton.classList.add('text-gray-600', 'hover:text-gray-800', 'hover:bg-white', 'hover:bg-opacity-50');
+                    tabContent.classList.add('hidden');
+                }
+            });
+        }
+
+        // Track changes between old and new data
+        function trackChanges(oldData, newData) {
+            const changes = [];
+            const fieldLabels = {
+                nama_perusahaan: 'Nama Perusahaan',
+                kode_swift: 'Kode SWIFT',
+                kota: 'Kota',
+                provinsi: 'Provinsi',
+                negara: 'Negara',
+                kode_pos: 'Kode Pos',
+                nomor_telepon: 'Nomor Telepon',
+                nomor_faksimile: 'Nomor Faksimile',
+                jenis_usaha: 'Jenis Usaha',
+                produk_jasa: 'Produk/Jasa',
+                nomor_anggaran_dasar: 'Nomor Anggaran Dasar',
+                tempat_pendirian: 'Tempat Pendirian',
+                tanggal_pendirian: 'Tanggal Pendirian',
+                npwp: 'NPWP',
+                surat_izin_usaha: 'Surat Izin Usaha',
+                tanggal_terbit_siu: 'Tanggal Terbit SIU',
+                masa_berlaku_siu: 'Masa Berlaku SIU',
+                client_risk: 'Client Risk',
+                tanggal_jatuh_tempo: 'Tanggal Jatuh Tempo',
+                nominal_fee: 'Nominal Fee',
+                status: 'Status Perusahaan',
+                catatan: 'Catatan',
+                pejabat_berwenang: 'Pejabat Berwenang',
+                pemegang_saham: 'Pemegang Saham',
+                pic_data: 'PIC',
+                dokumen_pendukung: 'Dokumen Pendukung'
+            };
+
+            for (const key in newData) {
+                if (key === 'id' || key === 'tanggal_dibuat' || key === 'tanggal_diubah' || key === 'diubah_oleh' || key === 'history') {
+                    continue;
+                }
+
+                const oldValue = oldData ? oldData[key] : null;
+                const newValue = newData[key];
+
+                if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+                    changes.push({
+                        field: fieldLabels[key] || key,
+                        oldValue: oldValue || '-',
+                        newValue: newValue || '-'
+                    });
+                }
+            }
+
+            return changes;
+        }
+
+        // Add history entry
+        function addHistoryEntry(companyId, action, changes = []) {
+            const company = companies.find(c => c.id === companyId);
+            if (!company) return;
+
+            if (!company.history) {
+                company.history = [];
+            }
+
+            const historyEntry = {
+                id: generateId(),
+                timestamp: new Date().toISOString(),
+                action: action,
+                user: currentUser?.nama || 'System',
+                changes: changes
+            };
+
+            company.history.push(historyEntry);
+            saveData();
+        }
+
+        // Save company
+        async function saveCompany() {
+            const saveButton = document.getElementById('saveCompanyBtn');
+            const saveText = document.getElementById('saveCompanyText');
+            const saveSpinner = document.getElementById('saveCompanySpinner');
+            
+            // Show loading state
+            saveText.textContent = 'Menyimpan...';
+            saveSpinner.classList.remove('hidden');
+            saveButton.disabled = true;
+            
+            try {
+                // Get company name
+                const companyName = document.getElementById('companyName').value.trim();
+                
+                // Validate required fields
+                if (!companyName) {
+                    showToast('Nama perusahaan harus diisi!', 'error');
+                    return;
+                }
+
+                const companyData = {
+                    id: currentEditingId || generateId(),
+                    nama_perusahaan: companyName,
+                    kode_swift: document.getElementById('kodeSwift').value.trim(),
+                    kota: document.getElementById('kota').value.trim(),
+                    provinsi: document.getElementById('provinsi').value.trim(),
+                    negara: document.getElementById('negara').value.trim(),
+                    kode_pos: document.getElementById('kodePos').value.trim(),
+                    nomor_telepon: document.getElementById('nomorTelepon').value.trim(),
+                    nomor_faksimile: document.getElementById('nomorFaksimile').value.trim(),
+                    jenis_usaha: document.getElementById('jenisUsaha').value,
+                    produk_jasa: getSelectedProducts(),
+                    nomor_anggaran_dasar: document.getElementById('nomorAnggaranDasar').value.trim(),
+                    tempat_pendirian: document.getElementById('tempatPendirian').value.trim(),
+                    tanggal_pendirian: document.getElementById('tanggalPendirian').value,
+                    npwp: document.getElementById('npwp').value.trim(),
+                    surat_izin_usaha: document.getElementById('suratIzinUsaha').value.trim(),
+                    tanggal_terbit_siu: document.getElementById('tanggalTerbitSIU').value,
+                    masa_berlaku_siu: document.getElementById('masaBerlakuSIU').value,
+                    client_risk: document.getElementById('clientRisk').value,
+                    tanggal_jatuh_tempo: document.getElementById('tanggalJatuhTempo').value,
+                    nominal_fee: document.getElementById('nominalFee').value.trim(),
+                    pejabat_berwenang: JSON.stringify(pejabatList),
+                    pemegang_saham: JSON.stringify(pemegangSahamList),
+                    pic_data: JSON.stringify(picList),
+                    dokumen_pendukung: JSON.stringify(dokumenList),
+                    status: document.getElementById('companyStatus').value,
+                    catatan: document.getElementById('catatan').value.trim(),
+                    tanggal_dibuat: currentEditingId ? (companies.find(c => c.id === currentEditingId)?.tanggal_dibuat || new Date().toISOString()) : new Date().toISOString(),
+                    tanggal_diubah: new Date().toISOString(),
+                    diubah_oleh: currentUser?.nama || 'System'
+                };
+
+                // Simulate save delay
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                if (currentEditingId) {
+                    // Update existing company
+                    const index = companies.findIndex(c => c.id === currentEditingId);
+                    if (index !== -1) {
+                        const oldData = {...companies[index]};
+                        const changes = trackChanges(oldData, companyData);
+                        
+                        // Preserve history
+                        companyData.history = companies[index].history || [];
+                        companies[index] = companyData;
+                        
+                        // Add history entry
+                        if (changes.length > 0) {
+                            addHistoryEntry(currentEditingId, 'update', changes);
+                        }
+                    }
+                } else {
+                    // Add new company
+                    companyData.history = [];
+                    companies.push(companyData);
+                    
+                    // Add creation history
+                    addHistoryEntry(companyData.id, 'create', []);
+                }
+
+                // Save to localStorage
+                saveData();
+                
+                // Update UI
+                filteredCompanies = [...companies];
+                updateDashboardStats();
+                renderCompanyTable();
+                updateFilterCounts();
+
+                showToast(currentEditingId ? 'Data perusahaan berhasil diperbarui!' : 'Data perusahaan berhasil disimpan!', 'success');
+                hideCompanyModal();
+            } catch (error) {
+                console.error('Error saving company:', error);
+                showToast('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.', 'error');
+            } finally {
+                // Reset loading state
+                saveText.textContent = currentEditingId ? 'Perbarui Data' : 'Simpan Data';
+                saveSpinner.classList.add('hidden');
+                saveButton.disabled = false;
+            }
+        }
+
+        // Get selected products
+        function getSelectedProducts() {
+            const products = [];
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.id.startsWith('produk-')) {
+                    products.push(checkbox.value);
+                }
+            });
+            return products.join(', ');
+        }
+
+        // Generate unique ID
+        function generateId() {
+            return 'company_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Update dashboard statistics
+        function updateDashboardStats() {
+            const total = companies.length;
+            const active = companies.filter(c => c.status === 'Aktif').length;
+            const inactive = companies.filter(c => c.status === 'Nonaktif').length;
+            
+            // Calculate monthly additions
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            const monthly = companies.filter(c => {
+                const createdDate = new Date(c.tanggal_dibuat);
+                return createdDate.getMonth() === currentMonth && createdDate.getFullYear() === currentYear;
+            }).length;
+
+            // Update display
+            document.getElementById('totalCompanies').textContent = total;
+            document.getElementById('activeCompanies').textContent = active;
+            document.getElementById('inactiveCompanies').textContent = inactive;
+            document.getElementById('monthlyCompanies').textContent = monthly;
+
+            // Update percentages
+            const activePercentage = total > 0 ? Math.round((active / total) * 100) : 0;
+            const inactivePercentage = total > 0 ? Math.round((inactive / total) * 100) : 0;
+            
+            document.getElementById('activePercentage').textContent = `${activePercentage}%`;
+            document.getElementById('inactivePercentage').textContent = `${inactivePercentage}%`;
+            
+            // Update progress bars
+            document.getElementById('activeProgressBar').style.width = `${activePercentage}%`;
+            document.getElementById('inactiveProgressBar').style.width = `${inactivePercentage}%`;
+            
+            // Update monthly trend
+            document.getElementById('monthlyTrend').textContent = `+${monthly} dari bulan lalu`;
+        }
+
+        // Render company table
+        function renderCompanyTable() {
+            const tbody = document.getElementById('companyTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (filteredCompanies.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            tbody.innerHTML = filteredCompanies.map((company, index) => `
+                <tr class="hover:bg-gray-50 transition-colors duration-200">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">${company.nama_perusahaan || '-'}</div>
+                        <div class="text-sm text-gray-500">${company.kode_swift || '-'}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${company.nomor_telepon || '-'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${getPICNames(company.pic_data)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${formatDate(company.tanggal_dibuat)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${formatDate(company.tanggal_diubah)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${company.status === 'Aktif' ? 'badge-active' : 'badge-inactive'}">
+                            ${company.status || 'Tidak Diketahui'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                            <button onclick="viewCompany('${company.id}')" class="text-blue-600 hover:text-blue-900 transition-colors duration-200" title="Lihat Detail">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="viewHistory('${company.id}')" class="text-purple-600 hover:text-purple-900 transition-colors duration-200" title="Riwayat Perubahan">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            ${canEdit() ? `
+                            <button onclick="editCompany('${company.id}')" class="text-indigo-600 hover:text-indigo-900 transition-colors duration-200" title="Edit">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="showDeleteConfirmation('${company.id}')" class="text-red-600 hover:text-red-900 transition-colors duration-200" title="Hapus">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Get PIC names from JSON string
+        function getPICNames(picData) {
+            try {
+                const pics = JSON.parse(picData || '[]');
+                return pics.length > 0 ? pics.map(pic => pic.nama).join(', ') : '-';
+            } catch {
+                return '-';
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('id-ID', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            } catch {
+                return '-';
+            }
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const jenisUsahaFilter = document.getElementById('jenisUsahaFilter').value;
+            const createdFromDate = document.getElementById('createdFromDate').value;
+            const createdToDate = document.getElementById('createdToDate').value;
+            const updatedFromDate = document.getElementById('updatedFromDate').value;
+            const updatedToDate = document.getElementById('updatedToDate').value;
+
+            filteredCompanies = companies.filter(company => {
+                // Search filter
+                const matchesSearch = !searchTerm || 
+                    (company.nama_perusahaan && company.nama_perusahaan.toLowerCase().includes(searchTerm)) ||
+                    (company.kode_swift && company.kode_swift.toLowerCase().includes(searchTerm)) ||
+                    (company.nomor_telepon && company.nomor_telepon.toLowerCase().includes(searchTerm));
+
+                // Status filter
+                const matchesStatus = !statusFilter || company.status === statusFilter;
+
+                // Jenis usaha filter
+                const matchesJenisUsaha = !jenisUsahaFilter || company.jenis_usaha === jenisUsahaFilter;
+
+                // Date filters
+                const createdDate = new Date(company.tanggal_dibuat);
+                const updatedDate = new Date(company.tanggal_diubah);
+
+                const matchesCreatedFrom = !createdFromDate || createdDate >= new Date(createdFromDate);
+                const matchesCreatedTo = !createdToDate || createdDate <= new Date(createdToDate + 'T23:59:59');
+                const matchesUpdatedFrom = !updatedFromDate || updatedDate >= new Date(updatedFromDate);
+                const matchesUpdatedTo = !updatedToDate || updatedDate <= new Date(updatedToDate + 'T23:59:59');
+
+                return matchesSearch && matchesStatus && matchesJenisUsaha && 
+                       matchesCreatedFrom && matchesCreatedTo && matchesUpdatedFrom && matchesUpdatedTo;
+            });
+
+            renderCompanyTable();
+            updateFilterCounts();
+            updateFilterSummary();
+        }
+
+        // Update filter counts
+        function updateFilterCounts() {
+            document.getElementById('filteredCount').textContent = filteredCompanies.length;
+            document.getElementById('totalCount').textContent = companies.length;
+        }
+
+        // Update filter summary
+        function updateFilterSummary() {
+            const activeFilters = [];
+            
+            if (document.getElementById('searchInput').value) {
+                activeFilters.push('Pencarian');
+            }
+            if (document.getElementById('statusFilter').value) {
+                activeFilters.push('Status');
+            }
+            if (document.getElementById('jenisUsahaFilter').value) {
+                activeFilters.push('Jenis Usaha');
+            }
+            if (document.getElementById('createdFromDate').value || document.getElementById('createdToDate').value) {
+                activeFilters.push('Tanggal Dibuat');
+            }
+            if (document.getElementById('updatedFromDate').value || document.getElementById('updatedToDate').value) {
+                activeFilters.push('Tanggal Diubah');
+            }
+
+            const filterSummary = document.getElementById('filterSummary');
+            const activeFiltersText = document.getElementById('activeFiltersText');
+
+            if (activeFilters.length > 0) {
+                activeFiltersText.textContent = activeFilters.join(', ');
+                filterSummary.classList.remove('hidden');
+            } else {
+                filterSummary.classList.add('hidden');
+            }
+        }
+
+        // Clear all filters
+        function clearAllFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('jenisUsahaFilter').value = '';
+            document.getElementById('createdFromDate').value = '';
+            document.getElementById('createdToDate').value = '';
+            document.getElementById('updatedFromDate').value = '';
+            document.getElementById('updatedToDate').value = '';
+            
+            applyFilters();
+        }
+
+        // Filter by status (for dashboard cards)
+        function filterByStatus(status) {
+            document.getElementById('statusFilter').value = status;
+            applyFilters();
+        }
+
+        // Toggle advanced filters
+        function toggleAdvancedFilters() {
+            const advancedFilters = document.getElementById('advancedFilters');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const toggleText = document.getElementById('toggleText');
+            
+            if (advancedFilters.classList.contains('hidden')) {
+                advancedFilters.classList.remove('hidden');
+                toggleIcon.style.transform = 'rotate(180deg)';
+                toggleText.textContent = 'Sembunyikan Filter';
+            } else {
+                advancedFilters.classList.add('hidden');
+                toggleIcon.style.transform = 'rotate(0deg)';
+                toggleText.textContent = 'Filter Lanjutan';
+            }
+        }
+
+        // Edit company
+        function editCompany(id) {
+            // Check if user has edit permission
+            if (!canEdit()) {
+                showToast('Anda tidak memiliki izin untuk mengedit data', 'error');
+                return;
+            }
+
+            const company = companies.find(c => c.id === id);
+            if (!company) return;
+
+            currentEditingId = id;
+            
+            // Populate form with existing data
+            document.getElementById('companyName').value = company.nama_perusahaan || '';
+            document.getElementById('kodeSwift').value = company.kode_swift || '';
+            document.getElementById('kota').value = company.kota || '';
+            document.getElementById('provinsi').value = company.provinsi || '';
+            document.getElementById('negara').value = company.negara || '';
+            document.getElementById('kodePos').value = company.kode_pos || '';
+            document.getElementById('nomorTelepon').value = company.nomor_telepon || '';
+            document.getElementById('nomorFaksimile').value = company.nomor_faksimile || '';
+            document.getElementById('jenisUsaha').value = company.jenis_usaha || '';
+            document.getElementById('nomorAnggaranDasar').value = company.nomor_anggaran_dasar || '';
+            document.getElementById('tempatPendirian').value = company.tempat_pendirian || '';
+            document.getElementById('tanggalPendirian').value = company.tanggal_pendirian || '';
+            document.getElementById('npwp').value = company.npwp || '';
+            document.getElementById('suratIzinUsaha').value = company.surat_izin_usaha || '';
+            document.getElementById('tanggalTerbitSIU').value = company.tanggal_terbit_siu || '';
+            document.getElementById('masaBerlakuSIU').value = company.masa_berlaku_siu || '';
+            document.getElementById('clientRisk').value = company.client_risk || '';
+            document.getElementById('tanggalJatuhTempo').value = company.tanggal_jatuh_tempo || '';
+            document.getElementById('nominalFee').value = company.nominal_fee || '';
+            document.getElementById('companyStatus').value = company.status || 'Aktif';
+            document.getElementById('catatan').value = company.catatan || '';
+
+            // Load people data
+            try {
+                pejabatList = JSON.parse(company.pejabat_berwenang || '[]');
+                pemegangSahamList = JSON.parse(company.pemegang_saham || '[]');
+                picList = JSON.parse(company.pic_data || '[]');
+                dokumenList = JSON.parse(company.dokumen_pendukung || '[]');
+            } catch (error) {
+                console.error('Error parsing people data:', error);
+                pejabatList = [];
+                pemegangSahamList = [];
+                picList = [];
+                dokumenList = [];
+            }
+
+            updatePeopleDisplay();
+
+            // Set selected products
+            setSelectedProducts(company.produk_jasa);
+
+            // Update modal title
+            document.getElementById('companyModalTitle').textContent = 'Edit Data Perusahaan';
+            document.getElementById('saveCompanyText').textContent = 'Perbarui Data';
+            
+            // Show modal
+            document.getElementById('companyModal').classList.remove('hidden');
+        }
+
+        // Set selected products
+        function setSelectedProducts(productsString) {
+            // Clear all checkboxes first
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                if (checkbox.id.startsWith('produk-')) {
+                    checkbox.checked = false;
+                }
+            });
+
+            if (productsString) {
+                const products = productsString.split(', ');
+                products.forEach(product => {
+                    const checkbox = document.querySelector(`input[value="${product}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                });
+            }
+        }
+
+        // Delete company - show confirmation modal
+        let companyToDelete = null;
+        
+        function showDeleteConfirmation(id) {
+            // Check if user has edit permission
+            if (!canEdit()) {
+                showToast('Anda tidak memiliki izin untuk menghapus data', 'error');
+                return;
+            }
+
+            const company = companies.find(c => c.id === id);
+            if (!company) return;
+
+            // Store company ID to delete
+            companyToDelete = id;
+            
+            // Update modal with company name
+            document.getElementById('deleteCompanyName').textContent = company.nama_perusahaan || 'perusahaan ini';
+            
+            // Show confirmation modal
+            document.getElementById('deleteConfirmModal').classList.remove('hidden');
+        }
+
+        // Setup delete confirmation handlers
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async function() {
+            if (companyToDelete) {
+                try {
+                    const index = companies.findIndex(c => c.id === companyToDelete);
+                    if (index !== -1) {
+                        const company = companies[index];
+                        const companyName = company.nama_perusahaan;
+                        
+                        // Add deletion entry to history before deleting
+                        addHistoryEntry(companyToDelete, 'delete', [{
+                            field: 'Status',
+                            oldValue: 'Data Aktif',
+                            newValue: 'Data Dihapus'
+                        }]);
+                        
+                        // Save updated history
+                        saveData();
+                        
+                        // Remove company from array
+                        companies.splice(index, 1);
+                        saveData();
+                        
+                        filteredCompanies = [...companies];
+                        updateDashboardStats();
+                        renderCompanyTable();
+                        updateFilterCounts();
+                        
+                        showToast(`Data perusahaan "${companyName}" berhasil dihapus!`, 'success');
+                    }
+                } catch (error) {
+                    console.error('Error deleting company:', error);
+                    showToast('Terjadi kesalahan saat menghapus data', 'error');
+                }
+                
+                // Hide modal and reset
+                document.getElementById('deleteConfirmModal').classList.add('hidden');
+                companyToDelete = null;
+            }
+        });
+
+        document.getElementById('cancelDeleteBtn').addEventListener('click', function() {
+            // Hide modal and reset
+            document.getElementById('deleteConfirmModal').classList.add('hidden');
+            companyToDelete = null;
+        });
+
+        // Show edit profile modal
+        function showEditProfileModal() {
+            if (!currentUser) return;
+            
+            // Populate form with current user data
+            document.getElementById('editNPP').value = currentUser.npp || '';
+            document.getElementById('editNama').value = currentUser.nama || '';
+            document.getElementById('editEmail').value = currentUser.email || '';
+            document.getElementById('editUnit').value = currentUser.unitBerwenang || '';
+            document.getElementById('editRole').value = getRoleLabel(currentUser.role);
+            
+            // Clear password fields
+            document.getElementById('editCurrentPassword').value = '';
+            document.getElementById('editNewPassword').value = '';
+            document.getElementById('editConfirmPassword').value = '';
+            
+            // Update profile photo preview
+            updateProfilePhotoPreview();
+            
+            // Show modal
+            document.getElementById('editProfileModal').classList.remove('hidden');
+            hideAllModals();
+        }
+
+        // Get role label
+        function getRoleLabel(role) {
+            const labels = {
+                'admin': 'Administrator',
+                'pegawai': 'Pegawai Operasional',
+                'manajer': 'Manajer'
+            };
+            return labels[role] || role;
+        }
+
+        // Hide edit profile modal
+        function hideEditProfileModal() {
+            document.getElementById('editProfileModal').classList.add('hidden');
+        }
+
+        // Update profile photo preview
+        function updateProfilePhotoPreview() {
+            const initials = currentUser.nama.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('profilePhotoInitials').textContent = initials;
+            
+            if (currentUser.profilePhoto) {
+                document.getElementById('profilePhotoImage').src = currentUser.profilePhoto;
+                document.getElementById('profilePhotoImage').classList.remove('hidden');
+                document.getElementById('profilePhotoInitials').classList.add('hidden');
+            } else {
+                document.getElementById('profilePhotoImage').classList.add('hidden');
+                document.getElementById('profilePhotoInitials').classList.remove('hidden');
+            }
+        }
+
+        // Handle profile photo upload
+        document.addEventListener('DOMContentLoaded', function() {
+            const photoInput = document.getElementById('profilePhotoInput');
+            if (photoInput) {
+                photoInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    
+                    // Check file size (max 2MB)
+                    if (file.size > 2 * 1024 * 1024) {
+                        showToast('Ukuran file terlalu besar. Maksimal 2MB', 'error');
+                        return;
+                    }
+                    
+                    // Check file type
+                    if (!file.type.startsWith('image/')) {
+                        showToast('File harus berupa gambar', 'error');
+                        return;
+                    }
+                    
+                    // Read and preview image
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const photoImage = document.getElementById('profilePhotoImage');
+                        const photoInitials = document.getElementById('profilePhotoInitials');
+                        
+                        photoImage.src = e.target.result;
+                        photoImage.classList.remove('hidden');
+                        photoInitials.classList.add('hidden');
+                        
+                        // Store temporarily
+                        currentUser.tempProfilePhoto = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+
+        // Save profile
+        async function saveProfile() {
+            const saveButton = document.getElementById('saveProfileBtn');
+            const saveText = document.getElementById('saveProfileText');
+            const saveSpinner = document.getElementById('saveProfileSpinner');
+            
+            // Show loading state
+            saveText.textContent = 'Menyimpan...';
+            saveSpinner.classList.remove('hidden');
+            saveButton.disabled = true;
+            
+            try {
+                // Get form values
+                const nama = document.getElementById('editNama').value.trim();
+                const email = document.getElementById('editEmail').value.trim();
+                const unit = document.getElementById('editUnit').value.trim();
+                const currentPassword = document.getElementById('editCurrentPassword').value;
+                const newPassword = document.getElementById('editNewPassword').value;
+                const confirmPassword = document.getElementById('editConfirmPassword').value;
+                
+                // Validate required fields
+                if (!nama || !email || !unit) {
+                    showToast('Semua field wajib harus diisi!', 'error');
+                    return;
+                }
+                
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showToast('Format email tidak valid!', 'error');
+                    return;
+                }
+                
+                // Validate password change if provided
+                if (currentPassword || newPassword || confirmPassword) {
+                    if (!currentPassword || !newPassword || !confirmPassword) {
+                        showToast('Untuk mengubah password, semua field password harus diisi!', 'error');
+                        return;
+                    }
+                    
+                    // Check current password
+                    const user = users[currentUser.npp];
+                    if (user.password !== currentPassword) {
+                        showToast('Password lama tidak sesuai!', 'error');
+                        return;
+                    }
+                    
+                    // Check password match
+                    if (newPassword !== confirmPassword) {
+                        showToast('Password baru dan konfirmasi tidak cocok!', 'error');
+                        return;
+                    }
+                    
+                    // Check password length
+                    if (newPassword.length < 6) {
+                        showToast('Password baru minimal 6 karakter!', 'error');
+                        return;
+                    }
+                    
+                    // Update password in users database
+                    users[currentUser.npp].password = newPassword;
+                }
+                
+                // Simulate save delay
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Update user data in users database
+                users[currentUser.npp].nama = nama;
+                users[currentUser.npp].email = email;
+                users[currentUser.npp].unitBerwenang = unit;
+                
+                // Update current user object
+                currentUser.nama = nama;
+                currentUser.email = email;
+                currentUser.unitBerwenang = unit;
+                
+                // Update profile photo if changed
+                if (currentUser.tempProfilePhoto) {
+                    currentUser.profilePhoto = currentUser.tempProfilePhoto;
+                    delete currentUser.tempProfilePhoto;
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Update UI
+                updateProfileDisplay();
+                updateHeaderProfilePhoto();
+                
+                showToast('Profil berhasil diperbarui!', 'success');
+                hideEditProfileModal();
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                showToast('Terjadi kesalahan saat menyimpan profil. Silakan coba lagi.', 'error');
+            } finally {
+                // Reset loading state
+                saveText.textContent = 'Simpan Perubahan';
+                saveSpinner.classList.add('hidden');
+                saveButton.disabled = false;
+            }
+        }
+
+        // Update header profile photo
+        function updateHeaderProfilePhoto() {
+            const headerPhoto = document.getElementById('headerProfilePhoto');
+            const headerInitials = document.getElementById('headerProfileInitials');
+            const headerImage = document.getElementById('headerProfileImage');
+            
+            const initials = currentUser.nama.split(' ').map(n => n[0]).join('').toUpperCase();
+            headerInitials.textContent = initials;
+            
+            if (currentUser.profilePhoto) {
+                headerImage.src = currentUser.profilePhoto;
+                headerImage.classList.remove('hidden');
+                headerInitials.classList.add('hidden');
+            } else {
+                headerImage.classList.add('hidden');
+                headerInitials.classList.remove('hidden');
+            }
+        }
+
+        // Setup people management
+        function setupPeopleManagement() {
+            // Pejabat management
+            document.getElementById('addPejabatBtn').addEventListener('click', () => toggleForm('pejabat'));
+            document.getElementById('savePejabatBtn').addEventListener('click', savePejabat);
+            document.getElementById('cancelPejabatBtn').addEventListener('click', () => cancelForm('pejabat'));
+
+            // Pemegang Saham management
+            document.getElementById('addPemegangSahamBtn').addEventListener('click', () => toggleForm('pemegangSaham'));
+            document.getElementById('savePemegangSahamBtn').addEventListener('click', savePemegangSaham);
+            document.getElementById('cancelPemegangSahamBtn').addEventListener('click', () => cancelForm('pemegangSaham'));
+
+            // PIC management
+            document.getElementById('addPICBtn').addEventListener('click', () => toggleForm('pic'));
+            document.getElementById('savePICBtn').addEventListener('click', savePIC);
+            document.getElementById('cancelPICBtn').addEventListener('click', () => cancelForm('pic'));
+
+            // Dokumen management
+            document.getElementById('addDokumenBtn').addEventListener('click', () => toggleForm('dokumen'));
+            document.getElementById('saveDokumenBtn').addEventListener('click', saveDokumen);
+            document.getElementById('cancelDokumenBtn').addEventListener('click', () => cancelForm('dokumen'));
+        }
+
+        // Toggle form visibility
+        function toggleForm(type) {
+            const form = document.getElementById(`${type}Form`);
+            form.classList.toggle('hidden');
+            
+            if (!form.classList.contains('hidden')) {
+                // Clear form
+                form.querySelectorAll('input').forEach(input => input.value = '');
+                // Set default date for dokumen
+                if (type === 'dokumen') {
+                    document.getElementById('tanggalUpload').value = new Date().toISOString().split('T')[0];
+                }
+            }
+        }
+
+        // Cancel form
+        function cancelForm(type) {
+            const form = document.getElementById(`${type}Form`);
+            form.classList.add('hidden');
+        }
+
+        // Save pejabat
+        function savePejabat() {
+            const nama = document.getElementById('namaPejabat').value.trim();
+            const jabatan = document.getElementById('jabatanPejabat').value.trim();
+            const nomor = document.getElementById('nomorIdentitasPejabat').value.trim();
+
+            if (!nama || !jabatan || !nomor) {
+                showToast('Semua field harus diisi', 'error');
+                return;
+            }
+
+            pejabatList.push({
+                id: generateId(),
+                nama: nama,
+                jabatan: jabatan,
+                nomor_identitas: nomor
+            });
+
+            updatePeopleDisplay();
+            cancelForm('pejabat');
+            showToast('Pejabat berhasil ditambahkan', 'success');
+        }
+
+        // Save pemegang saham
+        function savePemegangSaham() {
+            const nama = document.getElementById('namaPemegangSaham').value.trim();
+            const jabatan = document.getElementById('jabatanPemegangSaham').value.trim();
+            const persentase = document.getElementById('persentaseSaham').value.trim();
+            const identitas = document.getElementById('identitasPemegangSaham').value.trim();
+
+            if (!nama || !jabatan || !persentase || !identitas) {
+                showToast('Semua field harus diisi', 'error');
+                return;
+            }
+
+            pemegangSahamList.push({
+                id: generateId(),
+                nama: nama,
+                jabatan: jabatan,
+                persentase: persentase,
+                identitas: identitas
+            });
+
+            updatePeopleDisplay();
+            cancelForm('pemegangSaham');
+            showToast('Pemegang saham berhasil ditambahkan', 'success');
+        }
+
+        // Save PIC
+        function savePIC() {
+            const nama = document.getElementById('namaPIC').value.trim();
+            const email = document.getElementById('emailPIC').value.trim();
+            const telepon = document.getElementById('teleponPIC').value.trim();
+
+            if (!nama || !email || !telepon) {
+                showToast('Semua field harus diisi', 'error');
+                return;
+            }
+
+            picList.push({
+                id: generateId(),
+                nama: nama,
+                email: email,
+                telepon: telepon
+            });
+
+            updatePeopleDisplay();
+            cancelForm('pic');
+            showToast('PIC berhasil ditambahkan', 'success');
+        }
+
+        // Save dokumen
+        function saveDokumen() {
+            const nama = document.getElementById('namaDokumen').value.trim();
+            const tanggal = document.getElementById('tanggalUpload').value;
+
+            if (!nama || !tanggal) {
+                showToast('Semua field harus diisi', 'error');
+                return;
+            }
+
+            dokumenList.push({
+                id: generateId(),
+                nama: nama,
+                tanggal: tanggal
+            });
+
+            updatePeopleDisplay();
+            cancelForm('dokumen');
+            showToast('Dokumen berhasil ditambahkan', 'success');
+        }
+
+        // Update people display
+        function updatePeopleDisplay() {
+            updatePejabatTable();
+            updatePemegangSahamTable();
+            updatePICTable();
+            updateDokumenTable();
+        }
+
+        // Update pejabat table
+        function updatePejabatTable() {
+            const tbody = document.getElementById('pejabatTableBody');
+            const empty = document.getElementById('emptyPejabat');
+
+            if (pejabatList.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            tbody.innerHTML = pejabatList.map((pejabat, index) => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pejabat.nama}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pejabat.jabatan}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pejabat.nomor_identitas}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="removePejabat('${pejabat.id}')" class="text-red-600 hover:text-red-900">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Update pemegang saham table
+        function updatePemegangSahamTable() {
+            const tbody = document.getElementById('pemegangSahamTableBody');
+            const empty = document.getElementById('emptyPemegangSaham');
+
+            if (pemegangSahamList.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            tbody.innerHTML = pemegangSahamList.map((pemegang, index) => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pemegang.nama}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pemegang.jabatan}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pemegang.persentase}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pemegang.identitas}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="removePemegangSaham('${pemegang.id}')" class="text-red-600 hover:text-red-900">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Update PIC table
+        function updatePICTable() {
+            const tbody = document.getElementById('picTableBody');
+            const empty = document.getElementById('emptyPIC');
+
+            if (picList.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            tbody.innerHTML = picList.map((pic, index) => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pic.nama}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pic.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pic.telepon}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="removePIC('${pic.id}')" class="text-red-600 hover:text-red-900">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Update dokumen table
+        function updateDokumenTable() {
+            const tbody = document.getElementById('dokumenTableBody');
+            const empty = document.getElementById('emptyDokumen');
+
+            if (dokumenList.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            tbody.innerHTML = dokumenList.map((dokumen, index) => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${dokumen.nama}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatDate(dokumen.tanggal)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="removeDokumen('${dokumen.id}')" class="text-red-600 hover:text-red-900">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Remove functions
+        function removePejabat(id) {
+            pejabatList = pejabatList.filter(p => p.id !== id);
+            updatePejabatTable();
+        }
+
+        function removePemegangSaham(id) {
+            pemegangSahamList = pemegangSahamList.filter(p => p.id !== id);
+            updatePemegangSahamTable();
+        }
+
+        function removePIC(id) {
+            picList = picList.filter(p => p.id !== id);
+            updatePICTable();
+        }
+
+        function removeDokumen(id) {
+            dokumenList = dokumenList.filter(d => d.id !== id);
+            updateDokumenTable();
+        }
+
+        // View history
+        function viewHistory(id) {
+            const company = companies.find(c => c.id === id);
+            if (!company) return;
+
+            currentHistoryCompanyId = id;
+            
+            // Update modal title
+            document.getElementById('historyCompanyName').textContent = company.nama_perusahaan || 'Perusahaan';
+
+            const historyContent = document.getElementById('historyContent');
+            const history = company.history || [];
+
+            if (history.length === 0) {
+                historyContent.innerHTML = `
+                    <div class="text-center py-12">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada riwayat perubahan</h3>
+                        <p class="mt-1 text-sm text-gray-500">Data ini belum pernah diubah sejak dibuat.</p>
+                    </div>
+                `;
+            } else {
+                // Sort history by timestamp (newest first)
+                const sortedHistory = [...history].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                historyContent.innerHTML = sortedHistory.map((entry, index) => {
+                    const actionLabels = {
+                        create: '📝 Data Dibuat',
+                        update: '✏️ Data Diperbarui',
+                        delete: '🗑️ Data Dihapus'
+                    };
+
+                    const actionColors = {
+                        create: 'bg-green-100 border-green-300 text-green-800',
+                        update: 'bg-blue-100 border-blue-300 text-blue-800',
+                        delete: 'bg-red-100 border-red-300 text-red-800'
+                    };
+
+                    return `
+                        <div class="border ${actionColors[entry.action] || 'bg-gray-100 border-gray-300'} rounded-lg p-4 relative">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${actionColors[entry.action] || 'bg-gray-100 text-gray-800'}">
+                                            ${actionLabels[entry.action] || entry.action}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-500">${formatDateTime(entry.timestamp)}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center text-sm text-gray-700 mb-3">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                <span class="font-medium">${entry.user}</span>
+                            </div>
+
+                            ${entry.changes && entry.changes.length > 0 ? `
+                                <div class="mt-3 border-t border-gray-300 pt-3">
+                                    <p class="text-xs font-semibold text-gray-700 mb-2">Perubahan Detail:</p>
+                                    <div class="space-y-2">
+                                        ${entry.changes.map(change => `
+                                            <div class="bg-white bg-opacity-50 rounded p-2 text-xs">
+                                                <p class="font-semibold text-gray-700 mb-1">${change.field}</p>
+                                                <div class="grid grid-cols-2 gap-2">
+                                                    <div>
+                                                        <span class="text-gray-500">Sebelum:</span>
+                                                        <p class="text-gray-900 break-words">${formatHistoryValue(change.oldValue)}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-gray-500">Sesudah:</span>
+                                                        <p class="text-gray-900 break-words font-medium">${formatHistoryValue(change.newValue)}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('historyModal').classList.remove('hidden');
+        }
+
+        // Hide history modal
+        function hideHistoryModal() {
+            document.getElementById('historyModal').classList.add('hidden');
+            currentHistoryCompanyId = null;
+        }
+
+        // Format history value
+        function formatHistoryValue(value) {
+            if (!value || value === '-') return '-';
+            if (typeof value === 'string' && value.length > 100) {
+                return value.substring(0, 100) + '...';
+            }
+            return value;
+        }
+
+        // Format date time
+        function formatDateTime(dateString) {
+            if (!dateString) return '-';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleString('id-ID', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            } catch {
+                return '-';
+            }
+        }
+
+        // Export history to PDF
+        async function exportHistoryPDF() {
+            if (!currentHistoryCompanyId) return;
+
+            const company = companies.find(c => c.id === currentHistoryCompanyId);
+            if (!company) return;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                let yPos = 20;
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const margin = 20;
+                const contentWidth = pageWidth - (margin * 2);
+
+                // Title
+                doc.setFontSize(18);
+                doc.setFont(undefined, 'bold');
+                doc.text('RIWAYAT PERUBAHAN DATA PERUSAHAAN', pageWidth / 2, yPos, { align: 'center' });
+                
+                yPos += 10;
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'normal');
+                doc.text(company.nama_perusahaan || 'Perusahaan', pageWidth / 2, yPos, { align: 'center' });
+                
+                yPos += 15;
+                doc.setFontSize(10);
+                doc.text(`Tanggal Ekspor: ${formatDateTime(new Date().toISOString())}`, margin, yPos);
+                
+                yPos += 10;
+                doc.line(margin, yPos, pageWidth - margin, yPos);
+                yPos += 10;
+
+                const history = company.history || [];
+                
+                if (history.length === 0) {
+                    doc.text('Belum ada riwayat perubahan untuk perusahaan ini.', margin, yPos);
+                } else {
+                    const sortedHistory = [...history].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                    sortedHistory.forEach((entry, index) => {
+                        // Check if we need a new page
+                        if (yPos > 250) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+
+                        const actionLabels = {
+                            create: 'Data Dibuat',
+                            update: 'Data Diperbarui',
+                            delete: 'Data Dihapus'
+                        };
+
+                        // Entry header
+                        doc.setFontSize(11);
+                        doc.setFont(undefined, 'bold');
+                        doc.text(`${index + 1}. ${actionLabels[entry.action] || entry.action}`, margin, yPos);
+                        
+                        yPos += 6;
+                        doc.setFontSize(9);
+                        doc.setFont(undefined, 'normal');
+                        doc.text(`Waktu: ${formatDateTime(entry.timestamp)}`, margin + 5, yPos);
+                        
+                        yPos += 5;
+                        doc.text(`Oleh: ${entry.user}`, margin + 5, yPos);
+                        
+                        yPos += 7;
+
+                        // Changes
+                        if (entry.changes && entry.changes.length > 0) {
+                            doc.setFont(undefined, 'bold');
+                            doc.text('Perubahan:', margin + 5, yPos);
+                            yPos += 5;
+                            doc.setFont(undefined, 'normal');
+
+                            entry.changes.forEach(change => {
+                                if (yPos > 270) {
+                                    doc.addPage();
+                                    yPos = 20;
+                                }
+
+                                doc.text(`- ${change.field}:`, margin + 10, yPos);
+                                yPos += 5;
+                                
+                                const oldValueText = `  Sebelum: ${formatHistoryValue(change.oldValue)}`;
+                                const oldLines = doc.splitTextToSize(oldValueText, contentWidth - 15);
+                                doc.text(oldLines, margin + 10, yPos);
+                                yPos += (oldLines.length * 5);
+                                
+                                const newValueText = `  Sesudah: ${formatHistoryValue(change.newValue)}`;
+                                const newLines = doc.splitTextToSize(newValueText, contentWidth - 15);
+                                doc.text(newLines, margin + 10, yPos);
+                                yPos += (newLines.length * 5) + 3;
+                            });
+                        }
+
+                        yPos += 5;
+                        doc.line(margin, yPos, pageWidth - margin, yPos);
+                        yPos += 8;
+                    });
+                }
+
+                // Footer
+                const pageCount = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(8);
+                    doc.text(`Halaman ${i} dari ${pageCount}`, pageWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+                }
+
+                // Save PDF
+                const fileName = `Riwayat_${company.nama_perusahaan || 'Perusahaan'}_${new Date().getTime()}.pdf`;
+                doc.save(fileName);
+                
+                showToast('PDF berhasil diunduh!', 'success');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                showToast('Gagal membuat PDF. Silakan coba lagi.', 'error');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden transform transition-all duration-300 translate-x-full`;
+            
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            
+            toast.innerHTML = `
+                <div class="p-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-6 h-6 ${bgColor} rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    ${type === 'success' ? 
+                                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>' :
+                                        type === 'error' ?
+                                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>' :
+                                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
+                                    }
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-3 w-0 flex-1 pt-0.5">
+                            <p class="text-sm font-medium text-gray-900">${message}</p>
+                        </div>
+                        <div class="ml-4 flex-shrink-0 flex">
+                            <button class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none" onclick="this.parentElement.parentElement.parentElement.parentElement.remove()">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 5000);
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99d01a69751caa34',t:'MTc2Mjg4ODM2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
